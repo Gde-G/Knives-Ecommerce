@@ -1,0 +1,249 @@
+{% extends 'main.html' %}
+{% block title %}Profile / {% endblock title %}
+{% load static%}
+{% block content %}
+<section id="profile" class="profile" style="min-height: 60vh;">
+  <div class="container profile-all">
+    <!-- Presentation -->
+    <div class="row text-center">
+      <div class="img-container">
+        <img src="{%get_media_prefix%}{{user.profile_img}}" class="img-profile" alt="{{user}} img">
+      </div>
+      <h3 class="section-title text-capitalize">{{request.user}}</h3>
+      <div class="btn-group btn-group-lg my-2" role="group" aria-label="Button group">
+        <a href="{% url 'edit-profile' %}" class="btn btn-outline-secondary mx-2 border-0 w-25">
+          Editar Perfil
+          <i class="fa-solid fa-pen ms-2"></i>
+        </a>
+        <a href="{% url 'account_change_password' %}" class="btn btn-outline-secondary mx-2 border-0 w-25">
+          Cambiar Constraseña
+          <i class="fa-solid fa-key ms-2"></i>
+        </a>
+        <a href="{% url 'socialaccount_connections' %}" class="btn btn-outline-secondary mx-2 border-0 w-25"> 
+          Vinculaciones con otras applicaciones
+          <i class="fa-brands fa-connectdevelop ms-2"></i>
+        </a>
+      </div>
+    </div>
+    <!-- Information -->
+        <div class="accordion py-5" id="accordion-profile">
+          <!-- Data of account -->
+          <div class="accordion-item my-2">
+            <h2 class="accordion-header" id="heading-data">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-data"
+                aria-expanded="false" aria-controls="collapse-data">
+                <h3>Mis datos </h3>
+              </button>
+            </h2>
+            <div id="collapse-data" class="accordion-collapse collapse show" aria-labelledby="heading-data"
+              data-bs-parent="#accordion-profile">
+              <div class="accordion-body">
+                <div class="container">
+                  <div class="row ">
+                    <h4 class="home-subtitle h6">Datos de la cuenta</h4>
+                    <div class="col-9">
+                      <span>
+                        <h5 class="text-start "><small class="me-3 text-muted"> Usuario:
+                          </small> {{request.user}} </h5>
+                    </div>
+                    <div class="col-3">
+                      <a href="{% url 'edit-profile' %}#account-data" class="link-info"><small>Modificar datos</small></a>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-9">
+                      <h5 class="text-start"><small class="me-3 text-muted"> Email:
+                        </small>{{request.user.email}}</h5>
+                      </h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                  <hr style="width: 50%;">
+                </div>
+        
+                <div class="container">
+                  <div class="row">
+                    <h4 class="home-subtitle h6">Datos Personales</h4>
+                    <div class="col-9">
+                      <span>
+                        <h5 class="text-start"><small class="me-3 text-muted"> Nombre Completo:</small>
+                          {% if request.user.first_name == None and request.user.last_name == None%}
+                            No ingresado
+                          {% elif request.user.first_name == None %}
+                            {{request.user.last_name}}
+                          {% elif request.user.last_name == None %}
+                            {{request.user.first_name}}
+                          {% else %}
+                            {{request.user.first_name}} {{request.user.last_name}}
+                          {% endif %}
+                        </h5>
+                    </div>
+                    <div class="col-3">
+                      <a href="{% url 'edit-profile' %}#personal-data" class="link-info"><small>Modificar datos</small></a>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-9">
+                      <span>
+                        <h5 class="text-start"><small class="me-3 text-muted"> Pais y Ciudad:</small>
+                          {% if request.user.region != None %}
+                            {{request.user.region}}</h5>
+                          {% else %}
+                            No Ingresados</h5>
+                          {% endif %}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-9">
+                      <span>
+                        <h5 class="text-start"><small class="me-3 text-muted"> Numero de Telefono: </small>
+                          {% if request.user.phone_number != None %}
+                            {{request.user.phone_number}}</h5>
+                          {% else %}
+                            No ingresado</h5>
+                          {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                  <hr style="width: 50%;">
+                </div>
+                <div class="container">
+                  <div class="row">
+                    <h4 class="home-subtitle h6">Mis Direcciones</h4>
+                  </div>
+                  <div class="row">
+                    {% if addresses|length <= 0 %}
+                    <div class="col-9">
+                      <h5>No ha ingresado ninguna direccion</h5>
+                    </div>
+                    <div class="col-3">
+                      <a href="" class="link-info"><small>Agregar dirección</small></a>
+                    </div>
+                    {% else %}
+                      {% for address in addresses %}
+                    <div class="col-9">
+                      <span>
+                        <h5 class="text-start">{{address}}</h5>
+                    </div>
+                    <div class="col-3">
+                      <a href="" class="link-info"><small>Modificar/Agregar</small></a>
+                    </div>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Payment methods -->
+          <div class="accordion-item border-top border-secondary my-2">
+            <h2 class="accordion-header " id="heading-payment">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse-payment" aria-expanded="false" aria-controls="collapse-payment">
+                <h3>Mis medios de pago</h3>
+              </button>
+            </h2>
+            <div id="collapse-payment" class="accordion-collapse collapse" aria-labelledby="heading-payment"
+              data-bs-parent="#accordion-profile">
+              <div class="accordion-body">
+                <div class="row mb-2">
+                  <h4 class="home-subtitle h6">Debito</h4>
+                  {% if cards_debit|length == 0 %}
+                  <h5 class="text-start">No tiene tarjeta de debito registrada</h5>
+                  {% else %}
+                    {% for card in cards_debit %}
+                  <div class="col-9 text-start">
+                    <span>
+                      <h5 class="text-start"><small class="me-3"> Terminada en</small>{{card.card.last_four_digits}} </h5>
+                      <div class="type-card">
+                        <img src="{% if card.card.issuer == 'visa' %}{% static 'assets/images/icons/icon-visa.png' %}{% else %} {% static 'assets/images/icons/icon-mastercard.png' %}{% endif %}" alt="{{card.card.issuer|capfirst}} icon"
+                          class="img-cards">
+                        <small class="text-muted">{{card.card.issuer|capfirst}}</small>
+                      </div> 
+                      <small class="text-muted">, Nombre:{{card.card.name}}</small>
+                      <br>
+                      <small class="text-muted">{{card.card.expirate_date}}</small>
+                  </div>
+
+                  <div class="d-flex justify-content-center">
+                    <hr style="width: 50%;">
+                  </div>
+                    {% endfor %}
+                  {% endif %}
+                </div>
+                <div class="d-flex justify-content-center">
+                  <hr style="width: 100%; background-color: rgb(0, 253, 169)">
+                </div>
+                <div class="row mb-2">
+                  <h4 class="home-subtitle h6">Credito</h4>
+                  {% if cards_debit|length == 0 %}
+                  <h5 class="text-start">No tiene tarjeta de credito registrada</h5>
+                  {% else %}
+                    {% for card in cards_credit %}
+                  <div class="col-9 text-start">
+                    <span>
+                      <h5 class="text-start"><small class="me-3"> Terminada en</small>{{card.card.last_four_digits}} </h5>
+                      <div class="type-card">
+                        <img
+                          src="{% if card.card.issuer == 'visa' %}{% static 'assets/images/icons/icon-visa.png' %}{% else %} {% static 'assets/images/icons/icon-mastercard.png' %}{% endif %}"
+                          alt="{{card.card.issuer|capfirst}} icon" class="img-cards">
+                        <small class="text-muted">{{card.card.issuer|capfirst}}</small>
+                      </div>
+                      <small class="text-muted">, Nombre:{{card.card.name}}</small>
+                      <br>
+                      <small class="text-muted">{{card.card.expirate_date}}</small>
+                  </div>
+                  
+                  <div class="d-flex justify-content-center">
+                    <hr style="width: 50%;">
+                  </div>
+                    {% endfor %}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Buy that be maked -->
+          <div class="accordion-item border-top border-secondary my-2">
+            <h2 class="accordion-header" id="heading-bought">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse-bought" aria-expanded="false" aria-controls="collapse-bought">
+                <h3>Mis compras</h3>
+              </button>
+            </h2>
+            <div id="collapse-bought" class="accordion-collapse collapse" aria-labelledby="heading-bought"
+              data-bs-parent="#accordion-profile">
+              <div class="accordion-body">
+                <div class="row mb-2">
+                  {% if products|length == 0 %}
+                  <div class="col-9">
+                    <h5 class="text-start">No ha realizado compras</h5>
+                  </div>
+                  {% else %}
+                    {% for prod in products %}
+                  <div class="col-9">
+                    <span>
+                      <h5 class="text-start"><small class="me-3">{{prod.product.name|capfirst}}</small> <span class="text-success">${{prod.product.price}}</span>
+                        <small class="mx-5 text-muted"> {{prod.buyed_at}}</small>
+                      </h5>
+                  </div>
+                  <div class="col-3">
+                    <a href="{% url 'finished-payment' prod.order.token%}" class="link-info"><small>Ver detalles</small></a>
+                  </div>
+                    {% endfor %}
+                  {% endif %}
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+</section>
+{% endblock content%}
+{% block script-ext %}
+
+{% endblock script-ext %}

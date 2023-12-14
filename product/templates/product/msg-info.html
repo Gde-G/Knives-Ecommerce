@@ -1,0 +1,27 @@
+<div class="modal fade" id="msgInfoModal{{msg.id}}" tabindex="-1" aria-labelledby="msgInfoModal{{msg.id}}Label" aria-hidden="true">
+{% load static %}
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text-center" id="msgInfoModal{{msg.id}}Label">Message Information</h1>
+      </div>  
+        <div class="modal-body">
+          <p class="d-block"><span class="h5 text-muted">Message:</span> &nbsp; {{msg.body}}</p>
+          <p class="d-block"><span class="h6 text-muted">User that make it:</span> &nbsp; {{msg.user}}</p>
+          <p class="d-block"><span class="h6 text-muted">Date and time that be make it:</span> &nbsp; {{msg.created_at|date}}</p>
+          <hr style="width:50%; margin:0 auto;">
+          {% if msg.answer %}
+          <p class="d-block"><span class="h5 text-muted">Reply:</span> &nbsp; {{msg.answer}}</p>
+          <p class="d-block"><span class="h6 text-muted">StaffUser that reply:</span> &nbsp; {{msg.staff_user}}</p>
+          <p class="d-block"><span class="h6 text-muted">Date and time that reply:</span> &nbsp; {{msg.update_at|date}}</p>
+          {% else %}
+          <p class="d-block"><span class="h5 text-muted">Reply:</span> &nbsp; Don't be reply yet</p>
+          {% endif %}
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-primary mx-3" data-bs-dismiss="modal">Close</button>
+        </div>    
+    </div>
+  </div>
+</div>

@@ -1,0 +1,224 @@
+{% extends 'main.html' %}
+
+{% block title %}Confirmar pago / {% endblock title %}
+{% load static %}
+{% block content %}
+<section id="confirm">
+  <div class="container-fluid">
+    <div class="row my-3 text-center">
+      <h3 class="display-4">Confirmar compra</h3>
+      <div class="col-12 col-md-8">
+        <div class="row">
+          <div class="row">
+            <div class="card mb-3 mx-auto cart-items-each" style="max-width: 720px;">
+              <div class="row g-0">
+                <div class="col-sm-2">
+                  <i class="fa-solid fa-location-dot fs-2 text-secondary " style="padding: 1rem;"></i>
+                </div>
+                <div class="col-sm-10">
+                  <div class="card-body">
+                    <div class="row mt-3">
+                        {% if order.shipping_method == 'local' %}
+                        <h5 class="card-title mb-2">{{order.shipping_method|capfirst}}, Nuestro local 1342, Cordoba Argentina</h5>
+                        {% else %}
+                        <h5 class="card-title mb-2">{{order.shipping_method|capfirst}}, {{order.address}}</h5>
+                        {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container-fluid">
+          {% for prod in products %}
+          <div class="row">
+            <div class="card mb-3 mx-auto cart-items-each" style="max-width: 720px;">
+              <div class="row g-0">
+                <div class="col-sm-3 text-start">
+                  <img src="{% get_media_prefix %}{{prod.product.img_primary}}" class="img-fluid rounded-start"
+                    alt="{{prod.name}}" style="max-height: 5rem;">
+                </div>
+                <div class="col-sm-9">
+                  <div class="card-body">
+                    <div class="row mt-3">
+                      <div class="col-12 col-lg-7">
+                        <h5 class="card-title mb-2">{{prod|capfirst}}</h5>
+                      </div>
+                      <div class="col-12 col-lg-5 my-auto mx-0">
+                        <p class="card-text text-end">Precio: <strong class="text-success card-price">
+                            &nbsp;${{prod.product.price}}</strong></p>
+                      </div>
+                    </div>
+          
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="buy-conf">
+          <div class="row mb-2">
+              <div class="buy-conf-prods mt-3">
+                <span class="buy-conf-prods-amount">Productos({{amount_prod_cart}})</span>
+                <span class="buy-conf-prods-price">${{order.products_price}}</span>
+              </div>
+              <div class="buy-conf-prods mt-3">
+                <span class="buy-conf-prods-amount">Envio({{order.shipping_method}})</span>
+                <span class="buy-conf-prods-price">{% if order.shipping_price == 0 %} Gratis {% else %}${{order.shipping_price}} {% endif %}</span>
+              </div>
+              {% if order.discount_code != None %}
+              <div class="buy-conf-prods mt-3">
+                <span class="buy-conf-prods-amount">Descuento de:</span>
+                <span class="buy-conf-prods-price text-info">${{order.discount_amount}}</span>
+                <span class="text-muted mt-3" style="position: absolute; left: 36%; padding-top:1rem;"><small>Codigo:</small> <strong>{{order.discount_code.code}}</strong></span>
+              </div>
+              {% endif %}
+              <div class="buy-conf-prods mt-5">
+                <span class="buy-conf-prods-total">Total</span>
+                <span class="buy-conf-prods-total-price">${{order.total_to_pay}}</span>
+              </div>
+              <hr class="buy-conf-sep-md mt-4 mx-auto">
+              <hr class="buy-conf-sep-md mx-auto">
+              {% if order.pay_method == 'cash' %}
+              <div class="buy-conf-prods mb-2">
+                <span class="buy-conf-prods-total">A pagar con </span>
+                <span class="buy-conf-prods-total-price">
+                  {% if order.paymethod_cash_type == 'pagofacil' %}
+                  <img src=" {% static 'assets/images/icons/icon-pagofacil.png' %}" alt="Pagofacil icon" width="30" height="30" class="img-payments">
+                  {% else %}
+                    {% if order.paymethod_cash_type == 'rapipago' %}
+                  <img src=" {% static 'assets/images/icons/icon-rapipago.png' %}" alt="Rapipago icon" width="55" height="30">
+                    {% else %}
+                  <img src=" {% static 'assets/images/icons/icon-western-union.png' %}" alt="WU icon"  width="30" height="30" class="img-payments">
+                    {% endif %}
+                  {% endif %}
+                </span>
+              </div>
+              <div class="buy-conf-prods mt-5">
+                <a href="{% url 'order-pay-pdf' token %}" class="link-info mt-5" target="_blank"> Ver orden de pago de
+                  {{order.paymethod_cash_type|capfirst}}</a>
+              </div>
+              <form action="" method="post" id="form-confirm">
+                {% csrf_token %}
+                <div class="d-flex justify-content-center mt-3">
+                  <button type="submit" class="btn btn-gradient submitBtn" data-process="pending">Confirmar compra</button>
+                </div>
+              </form>
+              {% else %}
+                {% if order.pay_method == 'registered' %}
+              <div class="buy-conf-prods mt-2">
+                <span class="buy-conf-prods-amount">Tarjeta</span>
+                <span class="buy-conf-prods-price" style="color: black !important;">{{order.pay_method_card.card.type_card|capfirst}}o</span>
+              </div>
+              <div class="buy-conf-prods mt-2">
+                <span class="buy-conf-prods-amount">Proveedor</span>
+                <span class="buy-conf-prods-price"><img
+                  src="{% if order.pay_method_card.card.issuer == 'visa' %}{% static 'assets/images/icons/icon-visa.png' %} {% else %} {% static 'assets/images/icons/icon-mastercard.png' %} {% endif %}"
+                  width="30" height="30" alt="{{card.card.type_card|capfirst}}"></span>
+              </div>
+              <div class="buy-conf-prods mt-2">
+                <span class="buy-conf-prods-amount">Ultimos 4 numero</span>
+                <span class="buy-conf-prods-price" style="color: black !important;">{{order.pay_method_card.card.last_four_digits}}</span>
+              </div>
+              <hr class="buy-conf-sep-md mt-4 mx-auto">
+              <hr class="buy-conf-sep-md mx-auto">
+              <form action="" method="post" id="form-confirm">
+                {% csrf_token %}
+                <div class="d-flex justify-content-center my-2">
+                  <button type="submit" class="btn btn-gradient submitBtn" data-process="{{order.pay_method_card.card.status_returned}}">Confirmar compra</button>
+                </div>
+              </form>
+                {% else %}
+                  {% if order.pay_method == 'wallet' %}
+                    {% if order.paymethod_wallet_type == 'paypal' %}
+              <div class="d-flex justify-content-center my-2">
+                <button type="button" class="btn btn-paypal" data-bs-toggle="modal" data-bs-target="#selectStatusWallet">
+                  Pagar con
+                  <img src=" {% static 'assets/images/icons/icon-paypal.png' %}" alt="Paypal icon" width="30" height="30"
+                    class="">
+                </button>
+              </div>
+                    {% else %}
+                      {% if order.paymethod_wallet_type == 'mercadopago' %}
+              <div class="d-flex justify-content-center my-2">
+                <button type="button" class="btn btn-mp" data-bs-toggle="modal" data-bs-target="#selectStatusWallet">
+                  Pagar con
+                  <img src=" {% static 'assets/images/icons/icon-mercado-pago.png' %}" alt="mercadopago icon" width="30" height="30" class="">
+                  
+                </button>
+              </div>
+                      {% else %}
+              <div class="d-flex justify-content-center my-2">
+                <button type="button" class="btn btn-brubank" data-bs-toggle="modal" data-bs-target="#selectStatusWallet">
+                  Pagar con
+                  <img src=" {% static 'assets/images/icons/icon-brubank.png' %}" alt="brubank icon" width="60" height="30" class="">
+                </button>
+              </div>
+                      {%endif %}
+                    {% endif%}
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  {% if order.pay_method == 'wallet' %}
+<div class="modal" id="selectStatusWallet" tabindex="-1" aria-labelledby="selectStatusWalletLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="selectStatusWalletLabel">
+          Simulacion de pago con 
+          {% if order.paymethod_wallet_type == 'paypal' %}
+          <img src=" {% static 'assets/images/icons/icon-paypal.png' %}" alt="Paypal icon" width="30" height="30" class="">
+          {% else %}
+            {% if order.paymethod_wallet_type == 'mercadopago' %}
+          <img src=" {% static 'assets/images/icons/icon-mercado-pago.png' %}" alt="mercadopago icon" width="30" height="30" class="">
+            {% else %}
+          <img src=" {% static 'assets/images/icons/icon-brubank.png' %}" alt="brubank icon" width="60" height="30" class="">
+            {% endif %}
+          {% endif%}
+        </h5>
+        <button type="button" class="btn-close bg-dark" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="background-color: rgba(153, 0, 0, 0.24);">
+        <p class="fw-5">Recordando que este es un simulacro de ecommerce, asique no
+          vinculamos la aplicacion web con ningun gateway, ni sistemas de pago.
+          Por lo que debera <strong class="text-uppercase">Elegir el status que desea</strong> 
+          para poder redirigirlo directamente al vista de nuestra correspondiente  
+          al status que nos devolveria el gateway o sistema de pago.   
+        </p>
+      </div>
+      <form action="" method="post" id="form-confirm">
+        {% csrf_token %}
+        <div class="modal-footer justify-content-center" style="background-color: rgba(153, 0, 0, 0.24);">
+          <button type="submit" class="btn btn-success submitBtn" data-process="approved">Aprobado</button>
+          <button type="submit" class="btn btn-warning submitBtn" data-process="pending">Pendiente</button>
+          <button type="submit" class="btn btn-danger submitBtn" data-process="denied">Denegado</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+  {% endif%}
+{% endblock content %}
+
+{% block script-ext %}
+<script type="text/javascript">
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
+<script type="text/javascript">
+  const TokenOrder = '{{token}}';
+</script>
+<script src="{% static 'assets/js/payment/process-payment.js' %}"></script>
+
+{% endblock script-ext %}

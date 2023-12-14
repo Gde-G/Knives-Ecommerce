@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Knife ecommerce order pay</title>
+  <style>
+    body{
+      min-width: 100%;
+
+    }
+    .logo{
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 1px solid rgb(92, 1, 1);
+    }
+    table {
+      width: 100%;
+      text-align: center;
+    }
+     th{
+      padding: 6px 0;
+      text-align: center;
+      border-bottom: 1px solid #faeded;
+     }
+    td.prod {
+      padding: 6px 0;
+      text-align: left;
+      border-bottom: 1px solid #faeded;
+    }
+    td.price{
+      padding: 6px 0;
+      text-align: right;
+      border-bottom: 1px solid #faeded;
+    }
+
+
+  </style>
+</head>
+<body>
+  <table>
+    <tbody>
+      <tr>
+        <td style="width: 25%;">
+          <img src="https://i.ibb.co/rby4tDD/knife-logo.png"  class="logo">
+        </td>
+        <td style="width: 50%;">
+          <h1>Knives ecommerce Simulation</h1>
+        </td>
+        <td style="width: 25%; text-align: right;">{{order.emition_cash_date}}(GTM-3)</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    Recordar que esto es una <strong style="text-transform: uppercase;">simulacion</strong> 
+    a la orden de pago en efectivo en <strong>Knives Ecommerce Simulation</strong> 
+  </p>
+  <hr>
+  <hr>
+  <table>
+    <tr>
+      <th>Producto</th>
+      <th>Precio</th>
+    </tr>
+    {% for item in order_items %}
+    <tr>
+      <td class="prod">{{item|capfirst}}</td>
+      <td class="price">${{item.product.price}}</span></td>
+    </tr>
+    {% endfor %}
+  </table>
+  <table>
+    <tr>
+      <th>Envio</th>
+      <th>Precio</th>
+    </tr>
+    <tr>
+      <td class="prod">{{order.shipping_method|capfirst}}</td>
+      <td class="price">${{order.shipping_price}}</td>
+    </tr>
+  </table>
+  
+  {% if order.discount_code %}
+  <table>
+    <tr>
+      <th>Codigo</th>
+      <th>Descuento</th>
+    </tr>
+    <tr>
+      <td class="prod">{{order.discount_code.code}}</td>
+      <td class="price">${{order.discount_amount}}</td>
+    </tr>
+  </table>
+  {% endif %}
+  <hr>
+  <table>
+    <tr>
+      <th>Total</th>
+      <th>${{order.total_to_pay}}</th>
+    </tr>
+    <tr style="padding-top: 10px;">
+      <td>Vencimiento</td>
+      <td>{{order.expiration_cash_date}}</td>
+    </tr>
+  </table>
+  
+  <footer>
+    <hr>
+    <hr>
+    <p>Como esta order de pago es una simulacion por cuestiones de seguridad no pondremos ningun QR o Codigo de barras para realizar el pago.</p>
+    <p>Desarrollado por <a href="" style="color: rgb(0, 195, 255);">GdeG.com</a> esperamos que le haya gustado nuestro proyecto y en nuestra web podra encontrar muchos mas!</p>
+  </footer>
+  
+</body>
+</html>

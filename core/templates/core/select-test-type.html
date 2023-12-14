@@ -1,0 +1,64 @@
+{% load static %}
+{% if request.session.visited_before %}
+{%else %}
+
+<div class="modal fade" id="SelectTestType" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="SelectTestTypeLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="container p-0">
+        <div class="row text-center w-100 m-0 text-white" style="background-color: rgba(0,0,0, .9);">
+          <div class="col-3 text-center">
+            <div class="cont-logo-title my-3 mx-auto">
+              <img src="{% static 'assets/images/logo-icon/knife-logo.png' %}" class="logo-title" alt="Knives ecommerce simulation Logo" srcset="">
+            </div>
+          </div>
+          <div class="col-6 text-center">
+            <h1 class="display-4 my-4 mx-auto" id="SelectTestTypeLabel">Knives ecommerce simulation</h1>
+          </div>
+          <div class="col-3 text-center">
+            <div class="cont-logo-title gdg my-3 mx-auto">
+              <img src="{% static 'assets/images/logo-icon/logo-gdg.png' %}" class="logo-title" alt="GdeG Logo" srcset="">
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-body">
+        <div class="container">
+          <div class="row text-center">
+            <h4 class="display-7">¡Bienvenido a Knives Ecommerce Simulation!</h4>
+            <p class="text-muted">Desarrollada por <a href="" class="link-secondary text-decorantion-none" target="_blank">GdeG</a></p>
+          </div>
+          <div class="row">
+            <p>En Knives Ecommerce Simulation, te sumergirás en una experiencia única, centrada en la venta de cuchillos.
+            Nuestra plataforma simula un auténtico sitio de comercio electrónico, diseñado para brindarte una sensación realista de
+            compra y venta de cuchillos de alta calidad.</p>
+          </div>
+          <div class="row">
+            <p>
+              Nos enfocamos en brindarle una demostración de la habilidades
+              y capacidades, tanto en el desarrollo como en el diseño 
+              ¡Te invitamos a explorar y experimentar la aplicación web! Para ello le brindamos
+              dos roles para interactuar, estos son :
+            </p>
+          </div>
+          <div class="row">
+            <div class="btn-group w-100" role="group" aria-label="Buttons of users types">
+              <a href="{% url 'set-client-role'%}" class="btn btn-secondary w-25 py-3">Cliente</a>
+              <a href="{% url 'create-staff-user'%}" class="btn btn-primary w-25 py-3">Staff</a>
+            </div>
+          </div>
+          <div class="row text-center">
+            <small class="text-muted">Seleccione el rol con el cual quiere empezar a usar <strong>Knives Ecommerce Simulation</strong></small>
+          </div>
+          <div class="row">
+            <small class="text-muted"><span class="text-upper">Nota</span>: El rol seleccionado tendra vigencia de <strong>1 hora</strong>, pasado el tiempo se le volvera a preguntar. En caso que desee cambiar el rol antes de que expire el rol, debera cerrar sesion de la cuenta que se cree y podra volver a elegir. </small>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+{% endif %}

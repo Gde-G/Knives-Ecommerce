@@ -1,0 +1,110 @@
+{% extends 'main.html' %}
+
+{% block title %} {% endblock title%}
+{% load static %}
+{% block content %}
+<section id="cash-payment">
+  <div class="container">
+    <div class="container w-100">
+      <h3 class="mt-3 display-5 text-center">Pagos en efectivo</h3>
+      <div id="alert" class="alert alert-danger alert-dismissible" style="display:none;">
+        Porfavor complete todos los campos.
+        <button type="button" class="btn-close bg-secondary" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+    <form action="" method="post" id="form-checkout">
+      {% csrf_token %}
+      <div class="row my-5 w-100 mx-auto">
+        <div class="col-12 col-md-8 mx-auto py-4" style="background-color: rgb(224, 222, 222);">
+          <h5 class="display-6">Seleccione la empresa con la que quiere realizar el pago</h5>
+          <div class="form-check buy-info-shipping-kind-address">
+            <input class="form-check-input border-2" type="radio" name="cash_kind" id="id_kind_cash" value="pagofacil" tabindex="1"
+              style="font-size: 1.5rem;">
+            <label class="form-check-label" for="id_kind_cash">
+              <img src=" {% static 'assets/images/icons/icon-pagofacil.png' %}" alt="Padofacil icon" class="img-payments"> Pagofacil
+            </label>
+          </div>
+          <div class="form-check buy-info-shipping-kind-address">
+            <input class="form-check-input border-2" type="radio" name="cash_kind" id="id_kind_cash" value="rapipago" tabindex="1"
+              style="font-size: 1.5rem;">
+            <label class="form-check-label" for="id_kind_cash">
+              <img src=" {% static 'assets/images/icons/icon-rapipago.png' %}" alt="Cash icon" width="55" height="30"> Rapipago
+            </label>
+          </div>
+          <div class="form-check buy-info-shipping-kind-address">
+            <input class="form-check-input border-2" type="radio" name="cash_kind" id="id_kind_cash" value="western union" tabindex="1"
+              style="font-size: 1.5rem;">
+            <label class="form-check-label" for="id_kind_cash">
+              <img src=" {% static 'assets/images/icons/icon-western-union.png' %}" alt="WU icon" class="img-payments"> Western Union
+            </label>
+          </div>
+          
+          
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="buy-conf">
+            <h4>Resumen del pedido</h4>
+            <hr class="buy-conf-sep-large">
+            <div class="buy-conf-prods">
+              <span class="buy-conf-prods-amount">Productos({{amount_prod_cart}})</span>
+              <span class="buy-conf-prods-price">${{order.products_price}}</span>
+            </div>
+            <div class="buy-conf-prods">
+              <span class="buy-conf-prods-amount">{% if order.shipping_price == 0 %} Retira del local {% else %}Envio {% endif %}</span>
+              <span class="buy-conf-prods-price">
+                {% if order.shipping_price == 0 %} Gratis {% else %}${{order.shipping_price}} {% endif %}</span>
+            </div>
+            {% if order.discount_code != None %}
+            <div class="buy-conf-prods mt-3">
+              <span class="buy-conf-prods-amount">Descuento de:</span>
+              <span class="buy-conf-prods-price text-info">${{order.discount_amount}}</span>
+              <span class="text-muted mt-3" style="position: absolute; left: 36%; padding-top:1rem;"><small>Codigo:</small>
+                <strong>{{order.discount_code.code}}</strong></span>
+            </div>
+            {% endif %}
+            <hr class="buy-conf-sep-md" style="margin: 2rem auto 0 auto;">
+            <div class="buy-conf-prods">
+              <span class="buy-conf-prods-total">Total</span>
+              <span class="buy-conf-prods-total-price">${{order.total_to_pay}}</span>
+            </div>
+            <div class="d-flex justify-content-center my-3">
+              <button type="button" id="card-submit" data-bs-toggle="modal" data-bs-target="#disclaimerModal" class="btn btn-gradient buy-info-shipping-btn-cont w-50">
+                Continue</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="disclaimerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="1"
+        aria-labelledby="disclaimerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h1 class="modal-title fs-5" id="disclaimerModalLabel"><i
+                  class="fa-solid fa-triangle-exclamation fs-2 text-secondary mx-3"></i>Advertencia</h1>
+            </div>
+            <div class="modal-body disclaimer-container">
+              <div class="">
+                <div class="row text-center">
+                </div>
+                <div class="row text-center">
+                  <p>Ya que este sitio tiene como objetivo simplemente demostrar los habilidades de <a href=""
+                      class='link-info'>GdeG</a> como desarrollador, y no el de realmente vender cuchillos.
+                  <p> Para evitar mal entendidos y problemas legales
+                    <strong>Generaremos una simulacion de Order de pago con para el metodo que usted selecciono. <strong
+                        class="text-uppercase">No sera una orden real.</strong></strong>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-gradient" data-bs-dismiss="modal">Confirmar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+</section>
+{% endblock content %}

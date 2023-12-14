@@ -1,0 +1,109 @@
+<!-- ///////// Footer ////////////-->
+<footer id="footer" class="footer">
+  <div class="container-fluid mb-2">
+    <div class="row text-center footer-content">
+      <!-- CONTACT -->
+      <div class="col-12 col-md-6 footer-content-contact mt-3">
+        <div class="row">
+          <h3 class="display-6">Contactanos:</h3>
+        </div>
+        <!-- Social media's -->
+        <div class="row">
+          <div class="col-6 col-sm-3 col-md-6 col-lg-3">
+            <a href="" class="text-decoration-none">
+              <span class="footer-icons">
+                <i class="fa-brands fa-whatsapp d-block fs-3"></i>
+                <small>0800 101 1010</small>
+              </span>
+            </a>
+          </div>
+          <div class="col-6 col-sm-3 col-md-6 col-lg-3">
+            <a href="" class="text-decoration-none">
+              <span class="footer-icons">
+                <i class="fa-brands fa-instagram d-block fs-3"></i>
+                <small>@knives_ecommerce</small>
+              </span>
+            </a>
+          </div>
+          <div class="col-6 col-sm-3 col-md-6 col-lg-3">
+            <a href="" class="text-decoration-none">
+              <span class="footer-icons">
+                <i class="fa-solid fa-envelope d-block fs-3"></i>
+                <small>knives@gmail.com</small>
+              </span>
+            </a>
+          </div>
+          <div class="col-6 col-sm-3 col-md-6 col-lg-3">
+            <a href="" class="text-decoration-none">
+              <span class="footer-icons">
+                <i class="fa-brands fa-twitter d-block fs-3"></i>
+                <small>@knives_ecommerce</small>
+              </span>
+            </a>
+          </div>
+        </div>
+        <!-- Fast question form  -->
+        <form action="">
+          <div class="row mt-3 ">
+            <h6 class="display-7">Consulta rapida</h6>
+            <div class="col-12">
+              <textarea class="form-control form-control-sm" type="text"
+                placeholder="**** Es necesario que inicie seccion en su cuenta. Le responderemos al mail q tenga vinculado en la brevedad ****"
+                aria-label="Nombre" cols="7" rows="5"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- Products and services -->
+      <div class="col-12 col-md-6 footer-content-services mt-3">
+        <div class="row m-0">
+          <!-- Products -->
+          <div class="col-6 footer-content-services-products">
+            <h3 class="display-6">Productos</h3>
+            <ul class="list-products">
+              <li class="list-item">
+                <a href="{% url 'products'%}">Ver Todos</a>
+              </li>
+              <li class="list-item">
+                <a href="{% url 'products'%}?sort=lp">Menor precio</a>
+              </li>
+              <li class="list-item">
+                <a href="{% url 'products'%}?sort=hp">Mayor precio</a>
+              </li>
+            </ul>
+          </div>
+          <!-- Info -->
+          <div class="col-6 footer-content-services-products">
+            <h3 class="display-6">Informacion util</h3>
+            <ul class="list-products">
+              <li class="list-item">
+                <a href="">Preguntas frequentes</a>
+              </li>
+              <li class="list-item">
+                <a href="{% url 'terms'%}">Terminos y condiciones</a>
+              </li>
+              <li class="list-item">
+                <a href="{% url 'privacy' %}">Politica de datos</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- BOTTOM FOOTER -->
+  <div class="footer-bottom">
+    <div class="container">
+      <div class="row text-center text-white">
+        <div class="col-12">
+          <div class="footer-bottom-copyright">
+            &COPY; Copyright 2023 &nbsp; &nbsp; &nbsp;
+            <a href="" class="link-light">KnivesEcommerce.com.ar</a>&nbsp;&nbsp;&nbsp;
+            |&nbsp;Created by&nbsp;<a href="" class="link-light"><i class="fa-regular fa-paper-plane mx-2"></i>Gde-G</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

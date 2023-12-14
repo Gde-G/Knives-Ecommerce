@@ -1,0 +1,174 @@
+{% load static %}
+{% load user_tags %}
+{% load socialaccount %}
+<!-- ///////// Navbar ////////////-->
+<nav class="navbar navbar-expand-lg main-nav" data-bs-theme="dark">
+  <div class="container">
+    <a class="navbar-brand" href="{%url 'home' %}">
+      <img src="{% static './assets/images/logo-icon/knife-logo.png' %}" alt="Logo Knives" class="img-fluid">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="">
+        <i class="fa-solid fa-ellipsis-vertical"></i>
+      </span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{%url 'home' %}">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'products' %}">Productos</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Categorias
+          </a>
+          <ul class="dropdown-menu">
+            {% for cate in categories_cp%}
+            <li><a class="dropdown-item" href="{% url 'products_by_category' cate %}">{{cate|capfirst}}</a></li>
+            {% endfor%}
+          </ul>
+        </li>
+      </ul>
+      <form class="d-flex" role="search" method="get" action="{% url 'search-prods'%}">
+        
+        <input class="form-control me-2" type="text" placeholder="Search products" name="query" aria-label="Search products" value="{{query}}">
+        <button class="btn btn-secondary rounded-circle" type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+      {% if request.user.is_authenticated %}
+      <!-- User that be login -->
+      <hr class="text-white">
+        {% if amount_prod_cart > 0 %}
+      <a href="{% url 'cart' %}" class="link-light text-decoration-none position-relative">
+        <i class="fa-solid fa-cart-shopping mx-3 text-white"></i>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+          {{amount_prod_cart}}
+          <span class="visually-hidden">Products in cart</span>
+        </span>
+      </a>
+        {% else %}
+      <a href="{% url 'cart' %}" class="link-light text-decoration-none">
+        <i class="fa-solid fa-cart-shopping mx-3 text-white"></i>
+      </a>
+        {% endif %}
+      <div class="navbar-user mx-3">
+        <div class="dropdown-center">
+          <button class="btn btn-outline-light dropdown-toggle text-capitalize border-0" type="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            {{ request.user }}
+          </button>
+          <ul class="dropdown-menu" style="position: absolute; left: -100%;">
+            <li><a class="dropdown-item" href="{% url 'account_profile' %}"><i class="fa-regular fa-user me-3"></i>Pefil</a>
+            </li>
+            {% if request.user.is_staff %}
+            <li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="fa-solid fa-hammer me-3"></i>Panel staff</a></li>
+            {% endif %}
+            <li>
+              {% if request.user.is_staff and request.user.is_superuser == False %}
+              <a class="dropdown-item my-0 mx-auto" href="{% url 'staff-logout' %}">
+                <button type="button" class="btn btn-secondary w-75 ">Logout</button>
+              </a>
+              {% else %}
+              <a class="dropdown-item my-0 mx-auto" href="{% url 'account_logout' %}">
+                <button type="button" class="btn btn-secondary w-75 ">Logout</button>
+              </a>
+              {% endif %}
+            </li>
+          </ul>
+        </div>
+      </div>
+      {% else %}
+        {% if page == 'sign-in' %}
+        {% else %}
+          {% if request.META.PATH_INFO|search_term:'/accounts/'%}
+      <hr class="text-white">
+      <div class="btn-group ms-lg-5 d-flex justify-content-end" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-outline-light border-0" data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasLogin" aria-controls="offcanvasLogin">Login</button>
+        <a href="{% url 'account_signup' %}" class="btn btn-secondary"> Sign up</a>
+      </div>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</nav>
+{% if request.user.is_authenticated %}
+{% else %}
+  {% if page == 'sign-in' %}
+  {% else %}
+    {% if request.META.PATH_INFO|search_term:'/accounts/'%}
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasLogin" aria-labelledby="offcanvasLoginLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title display-6" id="offcanvasLoginLabel">Ingrese su cuenta</h5>
+    <button type="button" class="login-close btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <!-- FORM manually -->
+    <form action="{% url 'login-page' %}" method="post" class="login-form">
+      {% csrf_token %}
+      <div class="mb-2">
+        <label for="id_username" class="form-label">Usuario o Email</label>
+        <input type="text" class="form-control" id="id_username" name='username' placeholder="Username or email"
+          required>
+      </div>
+      <div class="mb-2">
+        <label for="id_password" class="form-label">Contraseña</label>
+        <div class="input-group">
+          <input type="password" class="form-control" id="id_password" name="password" placeholder="*********" autocomplete="off" required>
+          <div class="input-group-append">
+            <span class="input-group-text rounded-start-0 text-muted"
+              onclick="password_show_hide(document.getElementById('id_password'), document.getElementById('show_eye'), document.getElementById('hide_eye'));">
+              <i class="fa-solid fa-eye h4" id="show_eye"></i>
+              <i class="fa-solid fa-eye-slash d-none h4" id="hide_eye"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+      {{ login_form.captcha}}
+      <div class="form-check-reverse me-2 mb-2">
+        <a href="{% url 'account_reset_password' %}" class="text-start me-5"><small>Olvido su contraseña?</small> </a>
+        <input class="form-check-input" type="checkbox" value="" id="id_remember" name="remember">
+        <label class="form-check-label" for="id_remember">
+          Recordarme
+        </label>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-secondary border-dark">Ingresar</button>
+      </div>
+    </form>
+    <!-- WITH External login  -->
+    <div class="container-fluid login text-center w-100 mt-2">
+      <h6 class="display-6 login-subtitle">
+        O ingresa con:
+      </h6>
+      <div class="row">
+        <div class="col-6 login-medias gx-5">
+          <a href="{% provider_login_url 'facebook'%}">
+            <i class="fa-brands fa-facebook "></i>
+          </a>
+        </div>
+        <div class="col-6 login-medias position-relative gx-5">
+          <a href=" {% provider_login_url 'google'%}">
+            <img src="{% static 'assets/images/icons/logo-google.png'%}" class="position-absolute top-50 left-50 translate-middle" width="55" height="55" alt="">
+          </a>
+        </div>
+
+      </div>
+    </div>
+    <!-- Redirect to sign in -->
+    <div class="d-flex justify-content-start login-no-account mt-2">
+      <a href="{% url 'account_signup' %}" class="link-light">No tenes cuenta? Registrate <i
+          class="fa-solid fa-paper-plane ms-1"></i></a>
+    </div>
+
+  </div>
+</div>
+    {% endif %}
+  {% endif %}
+{% endif %}
+

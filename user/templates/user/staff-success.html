@@ -1,0 +1,41 @@
+{% extends 'user/base-user-staff.html'%}
+
+{% block title %} Staff Confirmado / {% endblock title %}
+
+{% block staff-content %}
+<div class="row text-center w-100 my-2">
+  <h3 class="display-4">Bienvenido {{request.user.username|capfirst}}.</h3>
+  <p>Ya puede disfrutar de las funcionabilidades del role "Staff", le recomendamos leer previamente las inidicaciones para que tenga mas nocion sobre los permisos que le otorga este rol.</p>
+</div>
+<div class="row text-center w-100 mt-1 functionalities">
+  <p>
+    <i class="fa-solid fa-user me-2 fs-4"></i>
+    Si desea cambiar sus credenciales o informacion puede dirigirse a su 
+    <a href="{% url 'account_profile'%}" class="link-light">
+      Perfil
+      <i class="fa-regular fa-paper-plane ms-2"></i>
+    </a>
+  </p>
+</div>
+<div class="row text-center w-100 mt-1 functionalities">
+  <p>
+    <i class="fa-solid fa-chart-line me-2"></i>
+    Si desea ver las funcionabilidades e informacion extra pueder dirigirse al
+    <a href="{% url 'admin:index'%}" class="link-light">
+      Staff Dashbord
+      <i class="fa-regular fa-paper-plane ms-2"></i>
+    </a>
+  </p>
+</div>
+<div class="row text-center w-100 mt-1 functionalities">
+  <p>
+    <i class="fa-solid fa-house me-2"></i>
+    Si desea navegar entra las funcionabilidades por su cuenta puede dirigirse al
+    <a href="{% url 'home'%}" class="link-light">
+      Inicio
+      <i class="fa-regular fa-paper-plane ms-2"></i>
+    </a>
+  </p>
+</div>
+{% endblock staff-content %}
+

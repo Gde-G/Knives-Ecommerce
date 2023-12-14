@@ -1,0 +1,27 @@
+@use './custom';
+
+// Componentes
+@use './components/animations';
+@use './components/buttons';
+@use './components/mixins';
+@use './components/typography';
+
+// Sections
+@use './sections/navbar';
+@use './sections/home';
+@use './sections/login';
+@use './sections/sign-in';
+@use './sections/footer';
+@use './sections/products';
+@use './sections/specific-prod';
+@use './sections/profile';
+@use './sections/desgins';
+@use './sections/handle';
+@use './sections/cart';
+@use './sections/buy';
+
+//Admin sections
+@use './admin-sections/add-prod';
+@use './sections/admin';
+//Errors
+@use './sections/errors'

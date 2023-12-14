@@ -1,0 +1,93 @@
+{% extends 'main.html' %}
+
+{% block title %} Register Address {% endblock title %}
+{% load static %}
+{% block content%}
+<section id="add-address">
+  <div class="container add-address my-3">
+    <div class="row">
+      <h3>Register a new address</h3>
+    </div>
+    
+    <form action="" method="post">
+      {% csrf_token %}
+      <div class="row mb-3">
+        <div class="col-12 col-sm-4 col-md-3">
+          <label for="id_country" class="form-label text-muted">Country</label>
+          <select name="country" id="id_country" class="form-select form-select-sm border-secondary border-2">
+            <option value="" selected disabled>Select country</option>
+            {% for country in countries %}
+            <option value="{{ country.pk }}">{{ country.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-6  col-sm-4 col-md-3">
+          <label for="id_region" class="form-label text-muted">Region/State</label>
+          <select name="region" id="id_region" class="form-select form-select-sm border-secondary border-2">
+            <option value="" selected disabled>Select region</option>
+          </select>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3">
+          <label for="id_city" class="form-label text-muted">City</label>
+          <select name="city" id="id_city" class="form-select form-select-sm border-secondary border-2">
+            <option value="" selected disabled>Select city</option>
+          </select>
+        </div>
+      </div>
+      <div class="row mb-3"> 
+        <div class="col-8 col-md-7">
+          <label for="id_street" class="form-label text-muted">Street Name</label>
+          <input type="text" name="street" id="id_street" class="form-control border-secondary border-2" required>
+        </div>
+        <div class="col-4 col-md-3">
+          <label for="id_number" class="form-label text-muted">Number</label>
+          <input type="text" name="number" id="id_number" class="form-control border-secondary border-2" required>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-6 col-sm-4 col-md-3">
+          <label for="id_zipcode" class="form-label text-muted">Zip code</label>
+          <input type="text" name="zipcode" id="id_zipcode" class="form-control border-secondary border-2">
+        </div>
+        <div class="col-6 col-sm-4 col-md-3">
+          <label for="id_address_type" class="form-label text-muted">Address Type</label>
+          <select name="address_type" id="id_address_type" class="form-select border-secondary border-2">
+            <option value="" selected disabled>Select type</option>
+            {% for key, val in address_type_choices%}
+            <option value="{{key}}">{{val|capfirst}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        
+        <div class="col-6 col-md-2">
+          <div id="apartment-flor">
+            <label for="id_apartment_flor" class="form-label text-muted">Flor</label>
+            <input type="text" name="apartment_flor" id="id_apartment_flor" class="form-control border-secondary border-2"placeholder="Number">
+          </div>
+        </div>
+        <div class="col-6 col-md-2">
+          <div id="apartment-id">
+            <label for="id_apartment_id" class="form-label text-muted">Indicator</label>
+            <input type="text" name="apartment_id" id="id_apartment_id" class="form-control border-secondary border-2"
+              placeholder="Letter or number">
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-12 col-sm-10">
+          <label for="id_special_instructions" class="form-label text-muted">Special Indications</label>
+          <textarea name="special_instructions" id="id_special_instructions" class="form-control border-secondary border-2" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-gradient w-25 my-2">Register</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock content%}
+
+{% block script-ext %}
+<script src="{% static 'assets/js/payment/options-by-country.js' %}"></script>
+<script src="{% static 'assets/js/payment/address-type.js' %}"></script>
+{% endblock script-ext %}

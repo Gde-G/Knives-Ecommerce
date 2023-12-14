@@ -1,0 +1,21 @@
+{% extends 'main.html'%}
+
+{% block title %} 404 / {% endblock title%}
+{% load static %}
+{% block content %}
+<section id="e-404">
+<div class="container">
+
+  <div class="row text-center mt-4 w-100 mx-0">
+    <h3 class="display-4">No se encontraron Resultados</h3>
+    <p class="text-muted">
+      No se pudo encontrar la página que solicitó. Intente refinar su búsqueda o use la
+      navegación anterior para ubicar la publicación.
+    </p>
+  </div>
+  <div class="row text-center w-100 mx-0">
+    <img src="{% static 'assets/images/errors/404.png'%}" class="img404" alt="">
+  </div>
+</div>
+</section>
+{% endblock content%}

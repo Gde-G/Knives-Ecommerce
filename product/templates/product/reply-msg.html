@@ -1,0 +1,55 @@
+
+{% load static %}
+<div class="modal fade" id="replyModal{{msg.id}}" tabindex="-1" aria-labelledby="replyModal{{msg.id}}Label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text-center" id="replyModal{{msg.id}}Label"><small> Question Make by:</small> &nbsp;
+          <strong>{{msg.user}}</strong>
+        </h1>
+        <br>
+      </div>
+      {% if page == 'update' %}
+      <form action="{% url 'edit-reply-msg' msg.id %}" method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+          <p class="d-block"><span class="h6">Question:</span> {{msg.body}}</p>
+          <hr style="width:50%; margin:0 auto;">
+          <div class="mb-2">
+            <label for="id_answer" class="form-label">Reply:</label>
+            <textarea name="answer" id="id_answer" rows="4" class="form-control border border-secondary"
+              required>{{msg.answer}}</textarea>
+          </div>
+  
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-primary mx-3" data-bs-dismiss="modal"
+            aria-label="Close">Close</button>
+          <button type="submit" class="btn btn-secondary">Confirm</button>
+        </div>
+      </form>
+      {% else %}
+      <form action="{% url 'add-reply' msg.id %}" method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+          <p class="d-block"><span class="h6">Question:</span> {{msg.body}}</p>
+          <hr style="width:50%; margin:0 auto;">
+          <div class="mb-2">
+            <label for="id_answer" class="form-label">Reply:</label>
+            <textarea name="answer" id="id_answer" rows="4" class="form-control border border-secondary"
+              placeholder="Reply the question here, remember that have to be less or equal than 512 characters"
+              required></textarea>
+          </div>
+  
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-primary mx-3" data-bs-dismiss="modal"
+            aria-label="Close">Close</button>
+          <button type="submit" class="btn btn-secondary">Submit</button>
+        </div>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+

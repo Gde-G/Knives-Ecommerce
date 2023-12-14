@@ -1,0 +1,166 @@
+@use '../custom' as *;
+@use '../components/mixins' as *;
+
+.modal-woodGradient {
+    @include woodGradient;
+}
+.signin {
+    margin: 2rem 1rem;
+    position: relative;
+    padding-bottom: 5rem;
+
+    &-icons {
+        font-size: 1.5rem;
+        margin: 0 .5rem;
+        color: $primary;
+
+        &-modal {
+            font-size: 2.5rem;
+        }
+    }
+
+    &-btn-s-shadow:hover {
+        @include shadowSecondary;
+    }
+
+    &-btn-p-shadow:hover {
+        @include shadowPrimary;
+    }
+
+    &-reddir-auto:hover {
+        background-color: rgba($primary, 0.8);
+        border-radius: 10px;
+
+        *.signin-icons-modal {
+            color: $info;
+        }
+    }
+}
+section#sign-up-staff{
+    .staff-docs{
+        max-height: 365px !important; 
+        background-color: rgba($black, 0.9) !important;
+        padding-bottom: 1rem;
+        margin: 0 auto;
+        @media (min-width: 768px) {
+            max-height: 700px !important;
+        }
+        .nav-item{
+            margin: 0 !important;
+            font-size: 0.9rem;
+            .nav-link{
+                padding: .2rem .5rem;
+                &.active{
+                    background-color: $white;
+                    color: $secondary !important;
+                    box-shadow: 0px 0px 5px 2px rgba($secondary, 0.75) inset;
+                    -webkit-box-shadow: 0px 0px 5px 2px rgba($secondary, 0.75) inset;
+                    -moz-box-shadow: 0px 0px 5px 2px rgba($secondary, 0.75) inset;
+                }
+                @media (min-width: 562px){
+                    padding: .4rem .8rem;
+                }
+            }
+            @media (min-width: 992px) {
+                font-size: 0.8rem;
+                max-height: 700px !important;
+                
+            }
+            
+            @media (min-width: 1066px) {
+                font-size: 0.9rem;
+            }
+        }
+        .scrollspy-data {
+            max-height: 250px !important;
+            overflow-y: scroll;
+
+
+            @media (min-width: 768px){
+                max-height: 610px !important;
+            }
+        }
+        .perm-list {
+            list-style-type: none;
+            padding-left: 20px;
+        
+            li::before {
+                font-family: "Font Awesome 6 Free";
+                content: "\f005";
+                margin-right: 10px;
+                color: $secondary;
+            }
+        }
+        .underline-secondary {
+            text-decoration: underline $secondary;
+        }
+    }
+    .staff-setup{
+        background-color:rgba($black, 0.8) !important;
+        color: $white;
+        .data-user{
+            background-color: $white;
+            width: max-content;
+            padding: 1rem 2rem;
+            padding-bottom: 0.5rem;
+            margin: 0 auto;
+            border-radius: 5px;
+            box-shadow: 1px 1px 14px 3px rgba($gray-300, 0.18);
+            -webkit-box-shadow: 1px 1px 14px 3px rgba($gray-300, 0.18);
+            -moz-box-shadow: 1px 1px 14px 3px rgba($gray-300, 0.18);
+            @media (min-width: 562px){
+                padding: 2rem 4rem;
+            }
+        }
+        .input-staff-email{
+            width: 100%;
+            margin: 0 auto 1.5rem auto;
+            @media (min-width:562px){
+                width: 95%;
+            }
+            @media (min-width:992px){
+                width: 75%;
+            }
+        }
+        .send-it{
+            padding: 2rem 1rem;
+            margin: 1rem;
+            background-color: $gray-200;
+            border-radius: 5px;
+            color: $black;
+            opacity: 0;
+            transition: opacity 1s ease;
+            display: none;
+            i{
+                color: rgb(0, 109, 0);
+                font-size: 4rem;
+            }
+            &.show{
+                display: flex !important;
+                opacity: 1;
+            }
+        }
+        .functionalities{
+            padding: 2rem 0;
+
+
+            &:hover{
+                background-color: $gray-200;
+                color: $black;
+                box-shadow: 1px 7px 139px -28px rgba($black, 0.8) inset;
+                -webkit-box-shadow: 1px 7px 139px -28px rgba($black, 0.8) inset;
+                -moz-box-shadow: 1px 7px 139px -28px rgba($black, 0.8) inset;
+                border-top-right-radius: 5px;
+                border-bottom-right-radius: 5px;
+                i{
+                    color: $secondary !important;
+                }
+                a{
+                    color: $secondary !important;
+                }
+            }
+        }
+    }
+}
+
+

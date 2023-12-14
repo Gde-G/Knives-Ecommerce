@@ -1,0 +1,323 @@
+{% extends 'main.html' %}
+{% load i18n %}
+
+{% block title %}Nueva {{kind|capfirst}} card /{% endblock title %}
+{% load static %}
+{% block content %}
+<section id="payment-form my-5">
+  <div class="container w-100">
+    <h3 class="mt-3 display-5 text-center">Agregar nueva tarjeta de {{kind|capfirst}}o</h3>
+    <div id="alert" class="alert alert-danger alert-dismissible" style="display:none;">
+      Porfavor complete todos los campos. 
+      <button type="button" class="btn-close bg-secondary" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    </div>
+    <form action="" method="post" id="form-checkout">
+      {% csrf_token %}
+      <div class="row my-5 w-100 mx-auto">
+        <div class="col-12 col-md-8 mx-auto py-4" style="background-color: rgb(247, 235, 221);">
+            <div class="row text-center">
+              <h3 class="display-4">Tarjetas de prueba</h3>
+            </div>
+            <div class="row text-center w-100 my-3">
+              <div class="col-4">
+                <button class="btn btn-success" type="button" id="btnAprovedCard" data-bs-toggle="collapse" data-bs-target="#aprovedCard" aria-expanded="false" aria-controls="aprovedCard">
+                  Tarjeta pago APROBADO 
+                  <i class="fa-solid fa-circle-down mx-1" id="icon-down"></i>
+                  <i class="fa-solid fa-circle-up mx-1" id="icon-up" style="display: none;"></i>
+                </button>
+              </div>
+              <div class="col-4">
+                <button class="btn btn-warning" type="button" id="btnPendingCard" data-bs-toggle="collapse" data-bs-target="#pendingCard" aria-expanded="false" aria-controls="pendingCard">
+                  Tarjeta pago PENDIENTE 
+                  <i class="fa-solid fa-circle-down mx-1" id="icon-down"></i> 
+                  <i class="fa-solid fa-circle-up mx-1" id="icon-up" style="display: none;"></i>
+                </button>
+              </div>
+              <div class="col-4">
+                <button class="btn btn-secondary" type="button" id="btnDeniedCard" data-bs-toggle="collapse" data-bs-target="#deniedCard" aria-expanded="false" aria-controls="deniedCard">
+                  Tarjeta pago DENEGADO 
+                  <i class="fa-solid fa-circle-down mx-1" id="icon-down"></i>
+                  <i class="fa-solid fa-circle-up mx-1" id="icon-up" style="display: none;"></i>
+                </button>
+              </div>
+            </div>
+            {% if kind == 'credit' %}
+            <div class="collapse" id="aprovedCard">
+              <div class="row mx-auto my-2"
+                style=" width: 95%;border: 1px solid rgb(66, 0, 0); background-color: rgb(218, 226, 233); border-radius: 5px;">
+                <div class="col-12 col-sm-6">
+                  <p>Numero: <strong>4111 1111 1111 1111</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Tipo ID: <strong>DNI</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Expiración: <strong>08/25</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Numero del ID: <strong>12345678</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>CVV: <strong>123</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Nombre: <strong>APPROVED CARD</strong></p>
+                </div>
+                <div class="col-12 text-center">
+                  <p>Estado que devolvera a la hora del pago: <strong class="text-success">Aprobado</strong></p>
+                  <small class="text-muted">Recuerde respetar los espacios y caracteres especiales(/ , . -)</small>
+                </div>
+              </div>
+            </div>
+            <div class="collapse" id="pendingCard">
+              <div class="row mx-auto mb-2"
+                style=" width: 95%;border: 1px solid rgb(66, 0, 0); background-color: rgb(218, 226, 233); border-radius: 5px;">
+                <div class="col-12 col-sm-6">
+                  <p>Numero: <strong>5431 1111 1111 1111</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Tipo ID: <strong>CPF</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Expiración: <strong>08/25</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Numero del ID: <strong>163709278-48</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>CVV: <strong>123</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Nombre: <strong>PENDING CARD</strong></p>
+                </div>
+                <div class="col-12 text-center">
+                  <p>Estado que devolvera a la hora del pago: <strong class="text-warning">Pendiente</strong></p>
+                  <small class="text-muted">Recuerde respetar los espacios y caracteres especiales(/ , . -)</small>
+                </div>
+              </div>
+            </div>
+            <div class="collapse" id="deniedCard">
+              <div class="row mx-auto mb-2"
+                style=" width: 95%;border: 1px solid rgb(66, 0, 0);background-color: rgb(218, 226, 233); border-radius: 5px;">
+                <div class="col-12 col-sm-6">
+                  <p>Numero: <strong>5506 9224 0063 4930</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Tipo ID: <strong>SSN</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Expiración: <strong>08/25</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Numero del ID: <strong>123456789</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>CVV: <strong>123</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Nombre: <strong>DENIED CARD</strong></p>
+                </div>
+                <div class="col-12 text-center">
+                  <p>Estado que devolvera a la hora del pago: <strong class="text-secondary">Denegado</strong></p>
+                  <small class="text-muted">Recuerde respetar los espacios y caracteres especiales(/ , . -)</small>
+                </div>
+              </div>
+            </div>
+            {% else %}
+            <div class="collapse" id="aprovedCard">
+              <div class="row mx-auto my-2"
+                style=" width: 95%;border: 1px solid rgb(66, 0, 0); background-color: rgb(218, 226, 233); border-radius: 5px;">
+                <div class="col-12 col-sm-6">
+                  <p>Numero: <strong>4462 0300 0000 0000</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Tipo ID: <strong>DNI</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Expiración: <strong>08/25</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Numero del ID: <strong>12345678</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>CVV: <strong>123</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Nombre: <strong>APPROVED CARD</strong></p>
+                </div>
+                <div class="col-12 text-center">
+                  <p>Estado que devolvera a la hora del pago: <strong class="text-success">Aprobado</strong></p>
+                  <small class="text-muted">Recuerde respetar los espacios y caracteres especiales(/ , . -)</small>
+                </div>
+              </div>
+            
+            </div>
+            <div class="collapse" id="pendingCard">
+              <div class="row mx-auto mb-2"
+                style=" width: 95%;border: 1px solid rgb(66, 0, 0); background-color: rgb(218, 226, 233); border-radius: 5px;">
+                <div class="col-12 col-sm-6">
+                  <p>Numero: <strong>5678 1111 1111 0000</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Tipo ID: <strong>CPF</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Expiración: <strong>08/25</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Numero del ID: <strong>123456789-10</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>CVV: <strong>123</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Nombre: <strong>PENDING CARD</strong></p>
+                </div>
+                <div class="col-12 text-center">
+                  <p>Estado que devolvera a la hora del pago: <strong class="text-warning">Pendiente</strong></p>
+                  <small class="text-muted">Recuerde respetar los espacios y caracteres especiales(/ , . -)</small>
+                </div>
+              </div>
+            </div>
+            <div class="collapse" id="deniedCard">
+              <div class="row mx-auto mb-2"
+                style=" width: 95%;border: 1px solid rgb(66, 0, 0);background-color: rgb(218, 226, 233); border-radius: 5px;">
+                <div class="col-12 col-sm-6">
+                  <p>Numero: <strong>4917 6100 0000 0000</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Tipo ID: <strong>SSN</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Expiración: <strong>08/25</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Numero del ID: <strong>123456789</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>CVV: <strong>123</strong></p>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <p>Nombre: <strong>DENAID CARD</strong></p>
+                </div>
+                <div class="col-12 text-center">
+                  <p>Estado que devolvera a la hora del pago: <strong class="text-secondary">Denegado</strong></p>
+                  <small class="text-muted">Recuerde respetar los espacios y caracteres especiales(/ , . -)</small>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+            <hr>
+            <hr>
+          <div class="row mx-auto" style="width: 95%;">
+            <div class="col-12 col-md-6 ">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control border-secondary border-2" name="number" id="id_number" placeholder="" required>
+                <label for="id_number">Card Number</label>
+              </div>
+              
+            </div>
+            <div class="col-12 col-md-3">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control border-secondary border-2" name="expirate_date" id="id_expirate_date" placeholder="" required>
+                <label for="id_expirate_date">EXP</label>
+              </div>
+            </div>
+            <div class="col-12 col-md-3">
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control border-secondary border-2" name="cvv" id="id_cvv" placeholder="" required>
+                <label for="id_cvv">CVV</label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row mb-2 mx-auto" style="width: 95%;">
+            <label for="id_name" class="form-label">Nombre completo</label>
+            <input type="text" name="name" id="id_name" class="form-control border-secondary border-2" required/>
+          </div>
+
+          <div class="row mb-2 mx-auto" style="width: 95%;">
+            <div class="col-12 col-sm-3">
+              <label for="id_type_id">Tipo de identificacion</label>
+              <select class="form-select border-secondary border-2" name="type_id" id="id_type_identification" required>
+                <option value="" selected disabled>Select the type</option>
+                  {% for key, value in types_id %}
+                <option value="{{key}}">{{value}}</option>
+                  {% endfor %}
+              </select>
+            </div>
+            <div class="col-12 col-sm-7">
+              <label for="id_number_id">Numero</label>
+              <input class="form-control border-secondary border-2" name="number_id" id="id_number_identification" required/>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="buy-conf">
+            <h4>Order Summary</h4>
+            <hr class="buy-conf-sep-large">
+            <div class="buy-conf-prods">
+              <span class="buy-conf-prods-amount">Products({{amount_prod_cart}})</span>
+              <span class="buy-conf-prods-price">${{order.products_price}}</span>
+            </div>
+            <div class="buy-conf-prods">
+              <span class="buy-conf-prods-amount">Shipping({{order.shipping_method}})</span>
+              <span class="buy-conf-prods-price">${{order.shipping_price}}</span>
+            </div>
+            <hr class="buy-conf-sep-md">
+            <div class="buy-conf-prods">
+              <span class="buy-conf-prods-total">Total</span>
+              <span class="buy-conf-prods-total-price">${{order.total_to_pay}}</span>
+            </div>
+            <div class="d-flex justify-content-center my-3">
+              {{form.captcha}}
+              <button type="submit" id="card-submit" class="btn btn-gradient buy-info-shipping-btn-cont w-50"> Continue</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+<div class="modal fade" id="disclaimerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="disclaimerModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h1 class="modal-title fs-5" id="disclaimerModalLabel"><i class="fa-solid fa-triangle-exclamation fs-2 text-secondary mx-3"></i>Advertencia</h1>
+      </div>
+      <div class="modal-body disclaimer-container">
+        <div class="">
+          <div class="row text-center">
+            
+          </div>
+          <div class="row text-center">
+            <p>Ya que este sitio tiene como objetivo simplemente demostrar los habilidades de <a href=""
+                class='link-info'>GdeG</a> como desarrollador, y no el de realmente vender cuchillos. Le brindaremos los datos
+              de las <strong>tarjeta de prueba</strong>.</p>
+            <p> Para evitar mal entendidos y problemas legales
+              <strong class="text-uppercase">Solamente se aceptara la informacion de las tarjetas de prueba</strong>,
+              cualquier otra informacion de tarjetas sera invalida.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-gradient" data-bs-dismiss="modal">Entendido</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block script-ext %}
+
+<script src="{% static 'assets/js/payment/collapse-icon.js' %}"></script>
+<script type="text/javascript">
+  $(window).on('load', function () {
+    $('#disclaimerModal').modal('show');
+  });
+</script>
+{% endblock script-ext %}

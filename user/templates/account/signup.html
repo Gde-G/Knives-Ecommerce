@@ -1,0 +1,194 @@
+{% extends 'main.html'%}
+
+{% block title %} Sign In / {% endblock title %}
+
+{% load socialaccount %}
+{% load static %}
+{% block content %}
+<!-- ///////// Sign in ////////////-->
+<section id="sign-in" class="signin" style="min-height: 60vh;">
+  <div class="container my-5">
+    <div class="row text-center signin-select my-5 pt-5">
+      <h1 class="display-3 signin-title">Registrarse</h1>
+      <div class="col-12 col-sm-6 mt-4">
+        <button type="button" class="btn btn-primary w-75 my-0 mx-auto p-3 signin-btn-s-shadow" data-bs-toggle="modal"
+          data-bs-target="#id_modal-manually">
+          Completar Manualmente
+          <span class="signin-icons text-white"><i class="fa-solid fa-pen"></i></span>
+        </button>
+      </div>
+      <div class="col-12 col-sm-6 mt-4">
+        <button type="button" class="btn btn-secondary w-75 my-0 mx-auto p-3 signin-btn-p-shadow" data-bs-toggle="modal"
+          data-bs-target="#id-modal-auto">
+          Automaticamente con
+          <div class="d-inline-block">
+            <span class="signin-icons"><i class="fa-brands fa-facebook"></i></span>
+            <span class="signin-icons"><i class="fa-brands fa-google"></i></span>
+          </div>
+        </button>
+      </div>
+    </div>
+    <div class="row text-center">
+      <h3 class="display-6">Ya tenes cuenta? <a href="{% url 'account_login' %}" class="link-secondary">Inicia Secion!</a></h3>
+    </div>
+    <!-- Modal Manually -->
+    <div class="modal fade" id="id_modal-manually" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="id_modal-manuallyLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content overflow-scroll overflow-md-hidden">
+          <div class="modal-header modal-woodGradient ">
+            <h1 class="modal-title display-5 text-white" id="id_modal-manuallyLabel">
+              Registrarse Manualmente
+            </h1>
+            <button type="button" class="btn btn-primary border-0 m-0 p-1" data-bs-dismiss="modal" aria-label="Close"><i
+                class="fa-solid fa-circle-xmark " style="font-size: 2rem;"></i></button>
+          </div>
+          <form action="" method="post">
+            {% csrf_token %}
+            <div class="modal-body">
+              <div class="row">
+                <h6 class="display-6 text-center mb-2">Ingrese la informacion requerida para poder registrarse</h6>
+              </div>
+              <div class="row text-center">
+                <div class="col-12 col-sm-4">
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control border-2 border-secondary" id="id_first_name" name="first_name"
+                      placeholder="Ingrese su nombre" required>
+                    <label for="id_first_name">Nombre</label>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-4">
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control border-2 border-secondary" id="id_last_name" name="last_name"
+                      placeholder="Ingrese su apellido" required>
+                    <label for="id_last_name">Apellido</label>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-4">
+                  <div class="form-floating mb-3">
+                    <input type="text" class="form-control border-2 border-secondary" id="id_username" name="username"
+                      placeholder="Ingrese el nombre de usuario que desea" required>
+                    <label for="id_username">Usuario</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row text-center">
+                <div class="col-12 col-sm-6">
+                  
+                  <div class="form-floating mb-3">
+                    <input type="email" class="form-control border-2 border-secondary" id="id_email" name="email" placeholder="name@example.com"
+                      required>
+                    <label for="id_email">Mail</label>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <div class="input-group mb-3">
+                    <select class="form-select border-2 border-secondary w-25" id="id_country" name="country" aria-label="Default select example">
+                      <option selected disabled>Pais</option>
+                      {% for country in countries %}
+                      <option value="{{country.id}}">{{country.name}}</option>
+                      {% endfor %}
+                    </select>
+                    <div class="form-floating w-50">
+                      <input type="tel" class="form-control border-2 border-secondary" id="id_phone_number" name="phone_number" placeholder="+## ##### #####" disabled required>
+                      <label for="id_phone_number">Numero de Telefono</label>
+                    </div>
+                  </div>
+                  
+                </div> 
+              </div>
+              <div class="row text-center">
+                <div class="col-12 col-sm-6">
+                  <label for="id_password1" class="cat-logo me-2 h6"> Contraseña</label>
+                  <div class="input-group mb-3">
+                    <input type="password" id="id_password1" name="password1" autocomplete="off"
+                      class="form-control border-2 border-secondary" placeholder="Ingrese su contraseña..." required
+                      aria-describedby="basic-addon1">
+                    <div class="input-group-append">
+                      <span class="input-group-text border border-2 border-start-0 border-secondary rounded-0 rounded-end text-muted"
+                        onclick="password_show_hide(document.getElementById('id_password1'), document.getElementById('show_eye'), document.getElementById('hide_eye'));">
+                        <i class="fa-solid fa-eye h4" id="show_eye"></i>
+                        <i class="fa-solid fa-eye-slash d-none h4" id="hide_eye"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label for="id_password2" class="cat-logo me-2 h6">Confirmar Contraseña</label>
+                  <div class="input-group mb-3">
+                    <input type="password" id="id_password2" name="password2" autocomplete="off"
+                      class="form-control form-shadow border border-secondary border-2" placeholder="Ingrese su contraseña..." required
+                      aria-describedby="basic-addon1">
+                    <div class="input-group-append">
+                      <span class="input-group-text border border-2 border-start-0 border-secondary rounded-0 rounded-end text-muted"
+                        onclick="password_show_hide(document.getElementById('id_password2'), document.getElementById('show_eye2'), document.getElementById('hide_eye2'));">
+                        <i class="fa-solid fa-eye h4" id="show_eye2"></i>
+                        <i class="fa-solid fa-eye-slash d-none h4" id="hide_eye2"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row ">
+                <div class="form-check-reverse ">
+                  <label class="form-check-label me-1 me-sm-2" for="id_t&c">
+                    <a href="{% url 'terms'%}" class="link-info">Terminos y condiciones</a>
+                  </label>
+                </div>
+                <div class="form-check-reverse ">
+                  <label class="form-check-label me-1 me-sm-2" for="id_data_policy">
+                    <a href="{% url 'privacy'%}" class="link-info">Politicas de datos</a>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer modal-woodGradient">
+              {{ form_sign.captcha}}
+              <button type="submit" class="btn btn-secondary">Confirmar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Auto -->
+    <div class="modal fade" id="id-modal-auto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="id-modal-autoLabel" aria-hidden="true">
+      <div class="modal-dialog signin-auto">
+        <div class="modal-content text-center modal-woodGradient">
+          <div class="modal-header ">
+            <h1 class="modal-title display-5 text-white" id="id-modal-autoLabel">Registrarse con </h1>
+            <button type="button" class="btn btn-primary border-0 m-0 p-1" data-bs-dismiss="modal" aria-label="Close"><i
+                class="fa-solid fa-circle-xmark " style="font-size: 2rem;"></i></button>
+          </div>
+          <div class="modal-body mb-3">
+            <div class="row text-center text-white mb-3">
+              <p>Seleccione la opcion con la cual quiera registrarse</p>
+            </div>
+            <div class="row text-center">
+              <div class="col-6 signin-reddir-auto">
+                <a href="" class="text-decoration-none">
+                  <span class="signin-icons-modal"><i class="fa-brands fa-facebook"></i></span>
+                  <br>
+                  <small class="text-white text-decoration-none">Facebook</small>
+                </a>
+              </div>
+              <div class="col-6 signin-reddir-auto">
+                <a href="{% provider_login_url 'google'%}" class="text-decoration-none">
+                  <span class="signin-icons-modal"><img src="{% static 'assets/images/icons/logo-google.png'%}" width="50" height="50" alt=""></span>
+                  <br>
+                  <small class="text-white text-decoration-none">Google</small>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+{% endblock content %}
+
+{% block script-ext %}
+<script src="{% static 'assets/js/phone-prefix.js' %}"></script>
+{% endblock script-ext%}

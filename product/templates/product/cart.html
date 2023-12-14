@@ -1,0 +1,252 @@
+{% extends 'main.html' %}
+
+{% block title%} Cart / {% endblock title%}
+
+{% block content%}
+{% load static %}
+<section id="cart" class="cart" style="min-height: 60vh;">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-8 cart-items">
+        <div class="d-flex m-4 justify-content-end">
+          <a href="{% url 'products' %}" class="btn btn-outline-secondary btn-width border-0 fs-5">
+            Ver mas productos <i class="fa-solid fa-paper-plane"></i>
+          </a>
+        </div>
+        <div class="container">
+          {% if prods %}
+            {% for prod in prods %}
+          <div class="row my-2">
+            <div class="card mb-3 mx-auto cart-items-each" style="max-width: 720px;">
+              <div class="row g-0">
+                <div class="col-sm-4">
+                  <img src="{% get_media_prefix %}{{prod.product.img_primary}}" class="img-fluid rounded-start"
+                    alt="{{prod.name}}">
+                </div>
+                <div class="col-sm-8">
+                  <div class="card-body">
+                    <h4 class="card-title mb-2">{{prod|capfirst}}</h4>
+                    <div class="row mt-3">
+                      <div class="col-12 col-lg-7">
+                        <p>{{prod.product.description|lower|capfirst|slice:":110"}} ...</p>
+                      </div>
+                      <div class="col-12 col-lg-5 my-auto mx-0">
+                        <p class="card-text text-end">Precio: <strong class="text-success card-price">
+                            &nbsp;${{prod.product.price}}</strong></p>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>  
+              <div class="row text-center">
+                <div class="d-inline">
+                  <form action="{% url 'delete-from-cart' prod.product.id %}" class="w-auto d-inline" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-link link-secondary text-decoration-none w-auto mx-2">Eliminar</button>
+                  </form>
+                  <a href="{% url 'prod' prod %}" class="link-info text-decoration-none mx-2">Ver producto</a>
+                </div>
+              </div>
+            </div>
+          </div>
+            {% endfor %}
+          {% else %}
+          <div class="row text-center my-5">
+            <h3 class="display-6 text-center">Su carrito esta vacio</h3>
+
+            <a href="{% url 'products' %}" class="btn btn-outline-secondary btn-width my-3 mx-auto">Descubir nuestros productos</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-12 col-md-4 cart-options">
+        <h3 class="display-5">Informacion util</h3>
+        <div class="row text-center mt-3">
+          <h4 class="display-6 mb-2">Metodos de pago</h4>
+          <div class="d-inline cart-options-payments">  
+            <img src="{% static 'assets/images/icons/icon-credit-card.png' %}" alt="Credit card icon" class="img-payments"
+              data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Tarjetas de credito">
+            <img src=" {% static 'assets/images/icons/icon-debit-card.png' %}" alt="Debit card icon" class="img-payments"
+              data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Tarjetas de debito">
+            <img src=" {% static 'assets/images/icons/icon-cash.png' %}" alt="Cash icon" class="img-payments"
+              data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Efectivo">
+            <img src=" {% static 'assets/images/icons/icon-digital-wallet.png' %}" alt="Digital Wallet icon" class="img-payments"
+              data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Billeteras virtuales">
+            <a href="" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#paymethod-modal">
+              <img src="{% static 'assets/images/icons/icon-viewmore.png' %}" alt="Menu Payments icon" class="img-payments"
+              data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="See more information">
+            </a> 
+        </div>
+        <div class="row text-center my-3">
+          <h4 class="display-6 mb-2">Metodos de envio</h4>
+          <div class="d-inline cart-options-payments">
+            <img src="{% static 'assets/images/icons/icon-adreani.png' %}" alt="Envios Nacionales" class="img-payments"
+              data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Envios Nacionales">
+            <img src="{% static 'assets/images/icons/icon-oca.png' %}" alt="Envios Internacionales" class="img-payments"
+              data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Envion Internacionales">
+            <img src="{% static 'assets/images/logo-icon/knife-icon.png' %}" alt="Retirar del local" class="img-payments"
+              data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Retirar del local">
+            <a href="" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#shipping-modal">
+              <img src="{% static 'assets/images/icons/icon-viewmore.png' %}" alt="Menu Shipping icon" class="img-payments"
+                data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="See more information">
+            </a>
+              
+          </div>
+        </div>
+        <hr class="mt-3">
+        <hr>
+        <div class="row p-0 mt-5">
+          <div class="d-inline cart-options-total">
+            <p>
+              <span class="display-5">Total:</span>
+              <span class="text-success h3"> &nbsp; &nbsp;${{total_to_pay}}</span>
+            </p>
+          </div>
+        </div>
+        {% if prods %}
+        <div class="row text-center">
+          <a href="{% url 'checkout' %}" class="btn btn-gradient mx-auto w-50">Buy</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+<div class="modal fade" id="paymethod-modal" tabindex="-1" aria-labelledby="paymethod-modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-secondary text-white">
+        <h1 class="modal-title display-6 text-center mx-auto" id="paymethod-modalLabel">Metodos de pago</h1>
+        <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+        
+      </div>
+      <div class="modal-body">
+        <p class="text-muted text-center">Recuerde que es una simulacion de ecommerce por lo que usaremos metodos genericos.</p>
+        <hr>
+        <div class="container">
+          <div class="row text-center">
+            <h3 class="display-6">Tarjetas de Credito</h3>
+            <div class="col-4">
+              <img src="{% static 'assets/images/icons/icon-mastercard.png'%}" width="40" height="40" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Mastercard Credit Card" alt="Mastercard credit">
+            </div>
+            <div class="col-4">
+              <img src="{% static 'assets/images/icons/icon-visa-credit.png'%}" width="40" height="40" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Visa Credit Card" alt="Visa credit">
+            </div>
+            <div class="col-4">
+              <img src="{% static 'assets/images/icons/icon-american-express.png'%}" width="40" height="40" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="American ExpressCredit Card" alt="American express credit">
+            </div>
+            
+          </div>
+          <hr>
+          <div class="row text-center">
+            <h3 class="display-6">Tarjetas de Debito</h3>
+            <div class="col-4">
+              <img src="{% static 'assets/images/icons/icon-mastercard-debit.png'%}" width="40" height="40" data-bs-toggle="tooltip"
+                data-bs-placement="bottom" data-bs-title="Mastercard debit Card" alt="Mastercard debit">  
+            </div>
+            <div class="col-4">
+              <img src="{% static 'assets/images/icons/icon-visa-debit.png'%}" width="40" height="40" data-bs-toggle="tooltip"
+                data-bs-placement="bottom" data-bs-title="Visa debit Card" alt="Visa debit">
+            </div>
+            <div class="col-4">
+              <img src="{% static 'assets/images/icons/icon-BBVA.png'%}" width="40" height="40"
+                data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="American Express debit Card"
+                alt="American express debit">
+            </div>
+          </div>
+          <hr>
+          <div class="row text-center">
+            <h3 class="display-6">Pagos en efectivo</h3>
+            <div class="col-4">
+              <img src="{% static 'assets/images/icons/icon-pagofacil.png'%}" width="40" height="40"
+                data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Efectivo Pagofacil" alt="Efectivo Pagofacil">
+            </div>
+            <div class="col-4">
+              <img src="{% static 'assets/images/icons/icon-rapipago.png'%}" width="55" height="30" data-bs-toggle="tooltip"
+                data-bs-placement="bottom" data-bs-title="Efectivo Rapipago" alt="Efectivo Rapipago">
+            </div>
+            <div class="col-4">
+              <img src="{% static 'assets/images/icons/icon-western-union.png'%}" width="40" height="40" data-bs-toggle="tooltip"
+                data-bs-placement="bottom" data-bs-title="Efectivo Western Union" alt="Efectivo Western Union">
+            </div>
+          </div>
+          <hr>
+          <div class="row text-center">
+            <h3 class="display-6">Billeteras virtuales</h3>
+            <div class="col-4">
+              <img src="{% static 'assets/images/icons/icon-mercado-pago.png'%}" width="40" height="40"
+                data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Mercadopago wallet" alt="Mercadopago wallet">
+            </div>
+            <div class="col-4">
+              <img src="{% static 'assets/images/icons/icon-paypal.png'%}" width="40" height="40" data-bs-toggle="tooltip"
+                data-bs-placement="bottom" data-bs-title="Paypal wallet" alt="Paypal wallet">
+            </div>
+            <div class="col-4">
+              <img src="{% static 'assets/images/icons/icon-brubank.png'%}" width="45" height="30" data-bs-toggle="tooltip"
+                data-bs-placement="bottom" data-bs-title="Brubank wallet" alt="Brubank wallet">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="shipping-modal" tabindex="-1" aria-labelledby="shipping-modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h1 class="modal-title display-6 text-center mx-auto" id="shipping-modalLabel">Metodos de envio</h1>
+        <button type="button" class="btn-close bg-dark" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p class="d-block text-muted text-center">Recuerde que es una simulacion de ecommerce por lo que usaremos metodos y precios genericos.</p>
+        <hr>
+        <div class="container">
+          <div class="row text-center">
+            <h3 class="display-6">Envios nacionales</h3>
+            <div class="col-6">
+              <img src="{% static 'assets/images/icons/icon-adreani.png'%}" width="40" height="40" data-bs-toggle="tooltip"
+                data-bs-placement="bottom" data-bs-title="Adreani envios" alt="adreani envios">
+            </div>
+            <div class="col-6">
+              <img src="{% static 'assets/images/icons/icon-oca.png'%}" width="40" height="40" data-bs-toggle="tooltip"
+                data-bs-placement="bottom" data-bs-title="Oca envios" alt="oca envios">
+            </div>
+            <small class="text-muted">Precio: $1000 </small>
+          </div>
+          <hr>
+          <div class="row text-center">
+            <h3 class="display-6">Envios internacionales</h3>
+            <div class="col-6">
+              <img src="{% static 'assets/images/icons/icon-oca.png'%}" width="40" height="40" data-bs-toggle="tooltip"
+                data-bs-placement="bottom" data-bs-title="Oca international envios" alt="Oca international envios">
+            </div>
+            <div class="col-6">
+              <img src="{% static 'assets/images/icons/icon-dhl.png'%}" width="40" height="40" data-bs-toggle="tooltip"
+                data-bs-placement="bottom" data-bs-title="DHL interantional envios" alt="DHL international envios">
+            </div>
+            <small class="text-muted">Precio: $5000 </small>
+          </div>
+          <hr>
+          <div class="row text-center">
+            <h3 class="display-6">Retiro desde nuestro local</h3>
+            <div class="col-12">
+              <img src="{% static 'assets/images/logo-icon/knife-logo.png'%}" width="60" height="60" data-bs-toggle="tooltip"
+                data-bs-placement="bottom" data-bs-title="Nuestro local" alt="Nuestro local">
+            </div>
+            <small class="text-muted">Precio: Gratis </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content%}
+
+{% block script-ext %}
+<script type="text/javascript">
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>
+{% endblock script-ext %}

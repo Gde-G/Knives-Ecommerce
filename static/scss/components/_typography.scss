@@ -1,0 +1,59 @@
+@use '../custom' as *;
+@use '../components/mixins' as *;
+
+@font-face {
+    font-family: 'Z003';
+    src: url("/static/assets/webfonts/Z003-MediumItalic.ttf");
+}
+
+.display-3 {
+    font-family: 'Z003', sans-serif;
+    font-weight: 500;
+
+    font-size: 3.5rem;
+
+    @include media-breakpoint-up(sm) {
+        font-size: 4.5rem;
+    }
+
+}
+
+.display-4 {
+    font-family: 'Z003', sans-serif;
+    font-weight: 300;
+    font-size: 3rem;
+
+    @include media-breakpoint-up(sm) {
+        font-size: 3.5rem;
+    }
+}
+
+.display-5 {
+    font-family: 'Z003', sans-serif;
+    font-weight: 300;
+    font-size: 2.5rem;
+
+    @include media-breakpoint-up(sm) {
+        font-size: 3rem;
+    }
+}
+
+.display-6 {
+    font-family: 'Z003', sans-serif;
+    font-weight: 300;
+    font-size: 1.5rem;
+
+    @include media-breakpoint-up(sm) {
+        font-size: 2rem;
+    }
+}
+
+.display-7 {
+    font-family: 'Z003', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+
+    @include media-breakpoint-up(sm) {
+        font-size: 1.5rem;
+    }
+}

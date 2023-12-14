@@ -1,0 +1,111 @@
+{% extends 'main.html' %}
+
+{% block title%}Shipping / {% endblock title%}
+{% load static %}
+{% block content%}
+<div class="container-fluid">
+  <form action="" method="post">
+    {% csrf_token %}  
+    <div class="row">
+      <div class="col-12 col-md-8 buy-info">
+        <div class="row buy-info-shipping">
+          <h3 class="display-6 my-3 ">Como quieres recibir/retirar los productos?</h3>
+          <h5>Direcciones</h5>
+          <div class="card mb-3 buy-info-shipping-location" style="max-width: 90%;">
+            <div class="row g-0">
+              <div class="col-12 col-md-4 col-lg-2 position-relative text-center">
+                <i class="fa-solid fa-location-dot buy-info-shipping-location-icon"></i>
+              </div>
+              <div class="col-12 col-md-8 col-lg-10 position-relative">
+                <div class="card-body">
+                  <div class="buy-info-shipping-location-data">
+                    {% if address %}
+                    <h5 class="card-title">{{ address }}</h5>
+                    <p class="card-text text-muted">
+                      Codigo postal: {{address.zipcode}} &nbsp;-&nbsp; {{address.address_type|capfirst}} 
+                      {% if address.address_type == 'apartment'%} {{address.apartment_flor}}, {{address.apartment_id}} {% endif %}.
+                    </p>
+                    <div class="d-flex justify-content-center">
+                      <a href="{% url 'addresses' token %}" class="link-secondary"><i class="fa-solid fa-hand-pointer me-2"></i>Elegir otra o editar</a>
+                    </div>
+                    {% else %}
+                    <h5 class="card-title">No tienes ninguna direccion registrada!</h5>
+                    <a href="{% url 'add-address' token %}" class="link-info">Regitrar una nueva direccion</a> 
+                    {% endif %}
+                  </div>
+      
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row buy-info-shipping-kind">
+          <h5 class="my-3">Recibir en</h5>
+          <div class="form-check buy-info-shipping-kind-address">
+            <input class="form-check-input border-2" type="radio" name="shipping_kind" id="id_shipping_kind" tabindex="1" value="delivery"
+              checked style="font-size: 1.5rem;">
+            <label class="form-check-label w-100" for="id_shipping_kind">
+              <div class="row">
+                <div class="col-12 col-sm-9 col-md-10">
+                  Llega el {{date_arrives}}. con {% if shipping_to == 'national' %} <img src="{% static 'assets/images/icons/icon-oca.png'%}" width="40" height="40" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" data-bs-title="Oca envios" alt="oca envios"> {% elif shipping_to == 'international' %} <img src="{% static 'assets/images/icons/icon-dhl.png'%}" width="40" height="40" data-bs-toggle="tooltip"
+                      data-bs-placement="bottom" data-bs-title="DHL interantional envios" alt="DHL international envios"> {% else %} No ingresado {% endif %}
+                </div>
+                <div class="col-12 col-sm-3 col-md-2">
+                  <span class="text-success" style="margin: 0 auto;">{% if shipping_price == ''%} Metodo no ingresado {% else %}${{shipping_price}}{% endif %}</span>
+                </div>
+              </div>
+            </label>
+          </div>
+          <h5 class="my-3">Retirar por</h5>
+          <div class="form-check buy-info-shipping-kind-address">
+            <input class="form-check-input border-2" type="radio" name="shipping_kind" id="id_shipping_kind3" tabindex="1" value="local"
+              style="font-size: 1.5rem;">
+            <label class="form-check-label w-100" for="id_shipping_kind3">
+              Retirar desde nuestro local
+              <div class="row">
+                <div class="col-12 col-sm-9 col-md-10">
+                  <span><small class="text-muted">Córdoba, Argentina</small></span>
+                </div>
+                <div class="col-12 col-sm-3 col-md-2">
+                  <span class="text-success" style="margin: 0 auto;">Free</span>
+                </div>
+              </div>
+              
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="buy-conf py-4">
+          <h4>Resumen de compra</h4>
+          <hr class="buy-conf-sep-large">
+          <div class="buy-conf-prods">
+            <span class="buy-conf-prods-amount">Productos({{amount_prod_cart}})</span>
+            <span class="buy-conf-prods-price">${{order.products_price}}</span>
+          </div>
+          <div class="buy-conf-prods">
+            <span class="buy-conf-prods-amount">Envio</span>
+            <span class="buy-conf-prods-price">No ingresado</span>
+          </div>
+          <hr class="buy-conf-sep-md" style="margin-top: 3rem;">
+          <div class="buy-conf-prods">
+            <span class="buy-conf-prods-total">Total</span>
+            <span class="buy-conf-prods-total-price">${{order.total_to_pay}}</span>
+          </div>
+          
+          <div class="d-flex justify-content-center my-3">
+            <button type="submit" class="btn btn-gradient buy-info-shipping-btn-cont w-50"> Continuar</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </form>
+</div>
+
+{% endblock content%}
+
+{% block script-ext %}
+
+{% endblock script-ext %}

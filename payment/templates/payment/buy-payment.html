@@ -1,0 +1,201 @@
+{% extends 'main.html' %}
+
+{% block title%}Medio de pago / {% endblock title%}
+{% load static %}
+{% block content%}
+<div class="container-fluid">
+  <form action="" method="post" id="chosen-payment">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-12 col-md-8 buy-info">
+        <div class="row buy-info-shipping">
+          <h3 class="display-6 my-3 ">Como quiere pagar?</h3>
+          <h5>Metodos de pago registrados</h5>
+          <div class="card mb-3 buy-info-shipping-location" style="max-width: 90%;">
+            <div class="row g-0">
+              <div class="col-12 col-md-4 col-lg-2 position-relative text-center">
+                <i class="fa-solid fa-cash-register buy-info-shipping-location-icon"></i>
+              </div>
+              <div class="col-12 col-md-8 col-lg-10 position-relative">
+                <div class="card-body">
+                  <div class="buy-info-shipping-location-data">
+                    {% if card == '' %}
+                    <h5 class="card-title">No tiene ningun metodo de pago registrado </h5>
+                    <p class="text-secondary"> <i class="fa-solid fa-down-long"></i> Añadir metodo de pago <i class="fa-solid fa-down-long"></i></p>
+                    
+                    {% else %}
+                    <div class="form-check buy-info-shipping-kind-address">
+                      <input class="form-check-input border-2" type="radio" name="payment_kind" id="id_payment_kind" value="registered" tabindex="1"
+                        checked style="font-size: 1.5rem;">
+                      <label class="form-check-label w-100 text-start" for="id_payment_kind">
+                        <div class="row">
+                          <div class="col-12 col-md-3">
+                            <img src="{% if card.card.issuer == 'visa' %}{% static 'assets/images/icons/icon-visa.png' %} {% else %} {% static 'assets/images/icons/icon-mastercard.png' %} {% endif %}" width="30" height="30" alt="{{card.card.type_card|capfirst}}">
+                          </div>
+                          <div class="col-12 col-md-9">
+                            <div class="row">
+                              {% if card.card.type_card == 'credit' %}
+                              <span class="h6 text-muted d-flex w-auto">Tarjeta de credito</span>
+                              {% else %}
+                              <span class="h6 text-muted d-flex w-auto">Tarjeta de debito</span>
+                              {% endif %}
+                              <span class="h5 d-flex w-auto">#### {{card.card.last_four_digits}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </label>
+                    </div>
+                    <div class="d-flex justify-content-center"><a href="{% url 'get-cards' token %}" class="link-secondary">Ver todas las tarjeta registradas  <i class="fa-solid fa-hand-pointer"></i></a></div>
+                    {% endif %}
+                  </div>
+    
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <h5 class="my-3">Nueva tarjeta Debito/Credito</h5>
+        <div class="form-check buy-info-shipping-kind-address">
+          <input class="form-check-input border-2" type="radio" name="payment_kind" id="id_kind_new_credit" value="credit"
+            tabindex="1" style="font-size: 1.5rem;" >
+          <label class="form-check-label" for="id_kind_new_credit">
+            <img src="{% static 'assets/images/icons/icon-credit-card.png' %}" alt="Credit card icon" class="img-payments"> Nueva tarjeta de credito
+          </label>
+        </div>
+        <div class="form-check buy-info-shipping-kind-address">
+          <input class="form-check-input border-2" type="radio" name="payment_kind" id="id_kind_new_debit" value="debit"
+            tabindex="1" style="font-size: 1.5rem;">
+          <label class="form-check-label" for="id_kind_new_debit">
+            <img src=" {% static 'assets/images/icons/icon-debit-card.png' %}" alt="Debit card icon" class="img-payments"> Nueva tarjeta de debito
+          </label>
+        </div>
+    
+        <h5 class="my-3">Otros metodos de pago</h5>
+        <div class="form-check buy-info-shipping-kind-address">
+          <input class="form-check-input border-2" type="radio" name="payment_kind" id="id_kind_cash" value="cash"
+            tabindex="1" style="font-size: 1.5rem;">
+          <label class="form-check-label" for="id_kind_cash">
+            <img src=" {% static 'assets/images/icons/icon-cash.png' %}" alt="Cash icon" class="img-payments"> Efectivo 
+          </label>
+        </div>
+        <div class="form-check buy-info-shipping-kind-address">
+          <input class="form-check-input border-2" type="radio" name="payment_kind" id="id_wallet" value="wallet"
+            tabindex="1" style="font-size: 1.5rem;">
+          <label class="form-check-label" for="id_wallet">
+            <img src=" {% static 'assets/images/icons/icon-digital-wallet.png' %}" alt="Digital Wallet icon" class="img-payments"
+              data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Billeteras virtuales"> Billetera virtual
+          </label>
+        </div>
+        
+      </div>
+    
+      <div class="col-12 col-md-4">
+        <div class="buy-conf">
+          <h4>Resumen del pedido</h4>
+          <hr class="buy-conf-sep-large">
+          <div class="buy-conf-prods">
+            <span class="buy-conf-prods-amount">Productos({{amount_prod_cart}})</span>
+            <span class="buy-conf-prods-price">${{order.products_price}}</span>
+          </div>
+          <div class="buy-conf-prods">
+            <span class="buy-conf-prods-amount">{% if order.shipping_price != 0 %} Envio({{order.shipping_method}}){% else %} Retira del local {% endif %}</span>
+            <span class="buy-conf-prods-price">{% if order.shipping_price != 0 %}${{order.shipping_price}}{% else %} Gratis {% endif %}</span>
+          </div>
+          <div class="buy-conf-prods" id="cont-input">
+            <div class="btn-group" role="group">
+              <span data-bs-toggle="offcanvas" data-bs-target="#discountCodesCanvas" aria-controls="discountCodesCanvas">
+                <button type="button" class="btn link-info" data-bs-toggle="tooltip" 
+                  data-bs-placement="top" data-bs-title="Ver codigos de prueba." >
+                  <i class="fa-solid fa-bars"></i>
+                </button>
+              </span>
+              <button type="button" class="btn link-info" id="discount-btn"  data-bs-toggle="tooltip" 
+                data-bs-placement="top" data-bs-title="Ingresar codigo de descuento.">
+                <i class="fa-solid fa-tags px-1"></i>Codigo de descuento
+              </button>
+            </div>
+            <input type="text" name="discount_code" id="id_discount_code" class="form-control border-secondary my-2" placeholder="Codigo de descuento" style="display: none;">
+
+          </div>
+          <hr class="buy-conf-sep-md">
+          <div class="buy-conf-prods">
+            <span class="buy-conf-prods-total">Total</span>
+            <span class="buy-conf-prods-total-price">${{order.total_to_pay}}</span>
+          </div>
+          <div class="d-flex justify-content-center mt-3">
+            <button type="submit" class="btn btn-gradient buy-info-shipping-btn-cont w-50"> Continuar</button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </form>
+</div>
+<div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+  id="discountCodesCanvas" aria-labelledby="discountCodesCanvasLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title display-6" id="discountCodesCanvasLabel">Codigos de descuento</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body bg-white rounded-3 text-dark w-100">
+    <div class="container w-100 p-2">
+      <div class="row text-center w-100">
+        <h3 class="display-6 text-secondary">Codigos para envio</h3>
+      </div>
+      <div class="row w-100">
+        <div class="col-6 text-start">
+          Codigo
+        </div>
+        <div class="col-6 text-end">
+          Descuento
+        </div>
+      </div>
+      <hr class="buy-conf-sep">
+      <hr class="buy-conf-sep-md">
+      {% for ds in discount_shipping%}
+      <div class="row text-center my-2 w-100">  
+        <div class="col-6 text-start">
+          <strong>{{ds.code}}</strong>
+        </div>
+        <div class="col-6 text-end">
+          {% if ds.discount == '100'%}
+          <strong class="text-success">Gratis</strong>
+          {% else %}
+          <strong class="text-success">{{ds.discount}}%</strong>
+          {% endif%}
+        </div>
+        <div class="col-12 text-center">
+          <small class="text-muted">Disponible desde: {{ds.enabled_from}}, hasta: {{ds.enabled_to}}</small>
+        </div>
+      </div>
+      <hr class="buy-conf-sep-md">
+      {% endfor %}
+      <hr class="buy-conf-sep">
+      <div class="row text-center w-100">
+        <h3 class="display-6 text-secondary">Codigos para el total</h3>
+      </div>
+      <hr class="buy-conf-sep-md">
+      {% for dp in discount_percentage%}
+      <div class="row text-center my-2 w-100">
+        <div class="col-6 text-start">
+          <strong>{{dp.code}}</strong>
+        </div>
+        <div class="col-6 text-end">
+          <strong class="text-success">{{dp.discount}}%</strong>
+        </div>
+        <div class="col-12 text-center">
+          <small class="text-muted">Disponible desde: {{dp.enabled_from}}, hasta: {{dp.enabled_to}}</small>
+        </div>
+      </div>
+      <hr class="buy-conf-sep-md">
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock content%}
+
+{% block script-ext %}
+
+<script src="{% static 'assets/js/payment/discount-btn.js' %}"></script>
+{% endblock script-ext %}

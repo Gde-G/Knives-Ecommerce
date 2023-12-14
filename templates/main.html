@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+{% load static %}
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock title %} Knives Ecommerce</title>
+  <link rel="stylesheet" href="{% static 'scss/style.css'%}">
+  <link rel="stylesheet" href="{% static 'scss/font-awesome.css'%}">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/images/favicon/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/images/favicon/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/images/favicon/favicon-16x16.png' %}">
+  <link rel="icon" type="image/png" sizes="192x192" href="{% static 'assets/images/favicon/favicon-192x192.png' %}">
+
+  <link rel="icon" type="image/png" sizes="512x512" href="{% static 'assets/images/favicon/favicon-512x512.png' %}">
+
+  <link rel="manifest" href="{% static 'assets/images/favicon/site.webmanifest' %}">
+</head>
+
+<body>
+  {% include '_navbar.html' %}
+  {% include '_messages.html' %}
+
+  {% block content %}{% endblock content %}
+
+  
+  {% include 'core/select-test-type.html' %}
+
+  {% include '_footer.html' %}
+
+  <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+    crossorigin="anonymous"></script>
+  <script src="{% static './libs/bootstrap-5.3.0/dist/js/bootstrap.bundle.js' %}"></script>
+  <script src="{%  static 'assets/js/passwdview.js' %}"></script>
+  
+  {% if request.session.visited_before %}
+
+  {% else %}
+  <script>
+    $(document).ready(function() {
+        $('#SelectTestType').modal('show');
+    });
+  </script>
+  {% endif %}
+  <script type="text/javascript">
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+  </script>
+  {% block script-ext %}{% endblock script-ext %}
+</body>
+
+</html>

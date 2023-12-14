@@ -1,0 +1,52 @@
+{% extends 'user/base-user-staff.html' %}
+
+{% block title %}Staff setup / {% endblock title %}
+{% load static %}
+{% block staff-content %}
+<div class="row text-center my-4">
+  <h3 class="display-5"> Crear usuario con rol de Staff</h3>
+</div>
+<div class="row text-center">
+  <p class="fs-5">Desde Knife Ecommerce Simulation le brindamos el nombre de usuario y la contraseña, debera ingresar su email para poder activar su cuenta.</p>
+</div>
+<div class="row text-start">
+  <div class="data-user">
+    <p class="text-secondary fw-3">
+      <button onclick="copyToClipboard('#copyBtn-username','{{username}}')" id="copyBtn-username" class="btn link-secondary" data-bs-toggle="tooltip" data-bs-placement="top"
+        data-bs-custom-class="custom-tooltip" data-bs-title="Copiar Usuario">
+        <i class="fa-solid fa-clipboard"></i>
+      </button>
+      Usuario: <strong class="text-primary"> {{username}}</strong>
+    </p>
+    <p class="text-secondary">
+      <button onclick="copyToClipboard('#copyBtn-password','{{password}}')" id="copyBtn-password" class="btn link-secondary" data-bs-toggle="tooltip" data-bs-placement="top"
+        data-bs-custom-class="custom-tooltip" data-bs-title="Copiar Contraseña">
+        <i class="fa-solid fa-clipboard"></i>
+      </button>
+      Contraseña: <strong class="text-primary"> {{password}}</strong>
+    </p>
+    <small class="text-muted">Una vez confirmado el email podra modificarlos.</small>
+  </div>
+</div>
+<form action="" method="post" id="staff-form">
+  {% csrf_token %}
+  <input type="hidden" name="username" id="id_username" value="{{username}}">
+  <input type="hidden" name="password" id="id_password" value="{{password}}">
+  <div class="row text-center my-3 mx-auto w-100">
+    <div class="form-floating input-staff-email">
+      <input type="email" class="form-control border border-secondary " id="id_email" name="email" placeholder="name@example.com">
+      <label for="id_email" class="text-dark ms-2">Ingrese su Correo Electronico</label>
+      
+    </div>
+  </div>
+  <div class="d-flex justify-content-center pb-3">
+    <button type="submit" class="btn btn-secondary border-white px-5">Enviar correo</button>
+  </div>
+</form>
+
+{% endblock staff-content %}
+
+{% block staff-script-ext %}
+<script src="{% static 'assets/js/clipboard.js'%}"></script>
+<script src="{% static 'assets/js/activate-staff.js' %}"></script>
+{% endblock staff-script-ext %}

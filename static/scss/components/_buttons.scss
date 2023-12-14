@@ -1,0 +1,110 @@
+@use '../custom' as *;
+@use '../components/mixins' as *;
+
+.btn-group {
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+
+    .faq-button {
+        margin: 0 .2rem;
+        color: $gray-800;
+        font-size: .7rem;
+        background-color: rgba($color: $secondary, $alpha: .2);
+        border: 1px solid $secondary;
+        border-radius: 5px;
+        width: 45%;
+
+        &:hover {
+            background-color: rgba($color: $secondary, $alpha: .5);
+            color: $primary;
+        }
+
+        @media (min-width: 576px) {
+            margin: .2rem;
+            font-size: .8rem;
+            width: 28%;
+        }
+
+        @media (min-width: 782px) {
+            margin: .1rem .4rem;
+            font-size: .9rem;
+            width: 16%;
+        }
+    }
+}
+
+.btn-gradient {
+    color: $white;
+    @include BGsecondaryToPrimaryGradient;
+    text-align: center;
+    font-size: 1rem;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        color: $white;
+        box-shadow: -2px 0px 35px -1px rgba($secondary, 0.75);
+        -webkit-box-shadow: -2px 0px 35px -1px rgba($secondary, 0.75);
+        -moz-box-shadow: -2px 0px 35px -1px rgba($secondary, 0.75);
+        transform: scale(1.1);
+    }
+}
+
+.btn-gradient-reverse {
+    color: $white;
+    @include BGprimaryToSecondaryGradient;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.btn-width {
+    width: 50% !important;
+
+    @media (min-width: 576px) {
+        width: 35% !important;
+    }
+}
+
+.btn-brubank, .btn-mp, .btn-paypal {
+    text-align: center;
+    font-size: 1rem;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+.btn-brubank{
+    color: rgb(42, 0, 139);
+    background-color: $white;
+    border: 1px solid rgb(42, 0, 139);
+    box-shadow: 1px 1px 3px 3px rgb(42, 0, 139);
+    &:hover{
+        color: $white;
+        background-color: rgb(140, 91, 255);
+        border: 1px solid rgb(42, 0, 139);
+    }
+}
+.btn-mp{
+    color: rgb(0, 110, 184);
+    background-color: $white;
+    border: 1px solid rgb(0, 118, 197);
+    box-shadow: 1px 1px 3px 3px rgb(0, 118, 197);
+    
+    &:hover {
+        color: $black;
+        background-color: rgb(50, 165, 241);
+        border: 1px solid rgb(0, 118, 197);
+    }
+}
+.btn-paypal {
+    color: rgb(0, 53, 197);
+    background-color: $white;
+    border: 1px solid rgb(0, 53, 197);
+    box-shadow: 1px 1px 3px 3px rgb(0, 53, 197);
+
+    &:hover {
+        color: $white;
+        background-color: rgb(50, 98, 255);
+        border: 1px solid rgb(0, 53, 197);
+    }
+}

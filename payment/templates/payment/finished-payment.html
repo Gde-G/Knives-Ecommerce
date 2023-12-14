@@ -1,0 +1,462 @@
+{% extends 'main.html' %}
+
+{% block title%} Pago Finalizado / {% endblock title%}
+{% load static %}
+{% block content %}
+<section id="finish-payment">
+  {% if order.status == 'approved'%}
+  <div class="container finished-block approved">
+    <div class="row text-center finished-block-header">
+      <h3 class="display-7 my-1"><i class="fa-solid fa-circle-check mx-3"></i>Compra realizada de forma exitosa<i class="fa-solid fa-circle-check mx-3"></i></h3>
+    </div>
+    <div class="row finished-block-content">
+      <div class="col-12 finished-block-content-prods">
+        <h6 class="text-center">Productos</h6>
+        <hr style="width:50%; color: green; margin: 1rem auto; height: 1rem;">
+        {% for prod in order_items %}
+        <div class="row w-100 text-center my-1 mx-0">
+          <div class="col-3 p-0">
+            <img src="{% get_media_prefix %}{{prod.product.img_primary}}" class="img-prod" alt="" srcset="">
+          </div>
+          <div class="col-6 text-center p-0">
+            <p class="name-prod">{{prod.product.name|capfirst}}</p>
+          </div>
+          <div class="col-3 p-0">
+            <p class="price-prod">${{prod.product.price}}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="col-12 finished-block-content-shipping">
+        <h6 class="text-center">Envio: </h6>
+        <hr style="width:50%; color: green; margin: 1rem auto; height: 1rem;">
+        <div class="row text-center w-100 mx-0">
+          <div class="col-6 p-0">
+            <p class="indicators">Metodo:</p>
+          </div>
+          <div class="col-6 p-0">
+            <p class="values">{{order.shipping_method|capfirst}}</p>
+          </div>
+        </div>
+        {% if order.shipping_method == 'delivery' %}
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6 p-0">
+            <p class="indicators">Dirección:</p>
+          </div>
+          <div class="col-6 p-0">
+            <p class="values">{{order.address}}</p>
+          </div>
+        </div>
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6 p-0">
+            <p class="indicators">Llega a partir del:</p>
+          </div>
+          <div class="col-6 p-0">
+            <p class="values">{{order.shipping_arrives}}</p>
+          </div>
+        </div>
+        {% else %}
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6 p-0">
+            <p class="indicators">Retiro desde:</p>
+          </div>
+          <div class="col-6 p-0">
+            <p class="values">Nuestro local</p>
+          </div>
+        </div>
+        {% endif %}
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6 p-0">
+            <p class="indicators">Precio:</p>
+          </div>
+          <div class="col-6 p-0">
+            <p class="values text-success">{% if order.shipping_price == 0 %} Gratis {% else %}${{order.shipping_price}} {% endif %}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 finished-block-content-summary">
+        <h6 class="text-center">Resumen </h6>
+        <hr style="width:50%; color: green; margin: 1rem auto; height: 1rem;">
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6">
+            <p class="indicators">Total pagado:</p>
+          </div>
+          <div class="col-6">
+            <p class="total-paid">${{order.total_to_pay}}</p>
+          </div>
+        </div>
+
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6">
+            <p class="indicators">Monitoriar pedido: </p>
+          </div>
+          <div class="col-6">
+            <p class="link-info">
+              <a href="#" class="link-info" data-bs-toggle="modal" data-bs-target="#TrackMoveModal">
+                <i class="fa-solid fa-hand-pointer me-1"></i>See details
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+    {% if order.status == 'pending'%}
+  <div class="container finished-block pending">
+    <div class="row text-center finished-block-header">
+      <h3 class="display-7 my-1"><i class="fa-solid fa-circle-pause mx-3"></i>Compra recibida, Esperando recibir el pago.<i class="fa-solid fa-circle-pause mx-3"></i></h3>
+      <small class="text-muter">Estamos esperando que el pago sea acreditado a nuestra cuenta, por lo general puede demorar
+        entre 24hs a 48hs habiles. Cualquier cosa puede comunicarse con el soporte de Knives Ecommerce Simulation.</small>
+        <form action="" method="post" id="form-confirm">
+          <div class="btn-group py-1" role="group">
+            <button type="submit" class="btn btn-success submitBtn" data-process="approved">Transformar en ACEPTADO</button>
+            <button type="submit" class="btn btn-danger submitBtn" data-process="denied">Transformar en DENEGADO</button>
+          </div>
+        </form>
+        
+    </div>
+
+    <div class="row finished-block-content">
+      <div class="col-12 finished-block-content-prods">
+        <h6 class="text-center">Productos</h6>
+        <hr style="width:50%; color: rgb(255, 196, 0); margin: 1rem auto; height: 1rem;">
+        {% for prod in order_items %}
+        <div class="row w-100 text-center my-1 mx-0">
+          <div class="col-3 p-0">
+            <img src="{% get_media_prefix %}{{prod.product.img_primary}}" class="img-prod" alt="" srcset="">
+          </div>
+          <div class="col-6 text-center p-0">
+            <p class="name-prod">{{prod.product.name|capfirst}}</p>
+          </div>
+          <div class="col-3 p-0">
+            <p class="price-prod">${{prod.product.price}}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="col-12 finished-block-content-shipping">
+        <h6 class="text-center">Envio: </h6>
+        <hr style="width:50%; color: rgb(255, 174, 0); margin: 1rem auto; height: 1rem;">
+        <div class="row text-center w-100 mx-0">
+          <div class="col-6 p-0">
+            <p class="indicators">Metodo:</p>
+          </div>
+          <div class="col-6 p-0">
+            <p class="values">{{order.shipping_method|capfirst}}</p>
+          </div>
+        </div>
+        {% if order.shipping_method == 'delivery' %}
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6 p-0">
+            <p class="indicators">Dirección:</p>
+          </div>
+          <div class="col-6 p-0">
+            <p class="values">{{order.address}}</p>
+          </div>
+        </div>
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6 p-0">
+            <p class="indicators">Llega:</p>
+          </div>
+          <div class="col-6 p-0">
+            <p class="values">Esperando a recibir el pago para determinar fecha</p>
+          </div>
+        </div>
+        {% else %}
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6 p-0">
+            <p class="indicators">Retiro desde:</p>
+          </div>
+          <div class="col-6 p-0">
+            <p class="values">Nuestro local</p>
+          </div>
+        </div>
+        {% endif %}
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6 p-0">
+            <p class="indicators">Cost:</p>
+          </div>
+          <div class="col-6 p-0">
+            <p class="values text-success">{% if order.shipping_price == 0 %} Gratis {% else %}${{order.shipping_price}}
+              {% endif %}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 finished-block-content-summary">
+        <h6 class="text-center">Resumen </h6>
+        <hr style="width:50%; color: rgb(255, 196, 0); margin: 1rem auto; height: 1rem;">
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6">
+            <p class="indicators">Total pagado:</p>
+          </div>
+          <div class="col-6">
+            <p class="total-paid">${{order.total_to_pay}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="row w-100 mx-0 text-center">
+        <div class="col-6">
+          <p class="indicators">Monitoriar pedido: </p>
+        </div>
+        <div class="col-6">
+          <p class="link-info">
+            <a href="#" class="link-info" data-bs-toggle="modal" data-bs-target="#TrackMoveModal">
+              <i class="fa-solid fa-hand-pointer me-1"></i>See details
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+    {% else %}
+      {% if order.status == 'denied'%}
+  <div class="container finished-block denied">
+    <div class="row text-center finished-block-header">
+      <h3 class="display-7 my-1"><i class="fa-solid fa-circle-xmark mx-3"></i>Compra fue rechazada !<i class="fa-solid fa-circle-xmark mx-3"></i></h3>
+      <small class="text-muter">El pago fue rechazado ya que(motivo generico) Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi aspernatur modi ratione velit magnam voluptate, eius praesentium perferendis consectetur magni facilis exercitationem recusandae dolorum dolore deserunt ullam ipsam atque nam et. Sequi esse vel odio fuga commodi, maxime distinctio ad?</small>
+    </div>
+    <div class="row finished-block-content">
+      <div class="col-12 finished-block-content-prods">
+        <h6 class="text-center">Productos</h6>
+        <hr style="width:50%; color: rgb(128, 0, 0); margin: 1rem auto; height: 1rem;">
+        {% for prod in order_items %}
+        <div class="row w-100 text-center my-1 mx-0">
+          <div class="col-3 p-0">
+            <img src="{% get_media_prefix %}{{prod.product.img_primary}}" class="img-prod" alt="" srcset="">
+          </div>
+          <div class="col-6 text-center p-0">
+            <p class="name-prod">{{prod.product.name|capfirst}}</p>
+          </div>
+          <div class="col-3 p-0">
+            <p class="price-prod">${{prod.product.price}}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="col-12 finished-block-content-shipping">
+        <h6 class="text-center">Envio: </h6>
+        <hr style="width:50%; color: rgb(128, 0, 0); margin: 1rem auto; height: 1rem;">
+        <div class="row text-center w-100 mx-0">
+          <div class="col-6 p-0">
+            <p class="indicators">Metodo:</p>
+          </div>
+          <div class="col-6 p-0">
+            <p class="values">{{order.shipping_method|capfirst}}</p>
+          </div>
+        </div>
+        {% if order.shipping_method == 'delivery' %}
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6 p-0">
+            <p class="indicators">Dirección:</p>
+          </div>
+          <div class="col-6 p-0">
+            <p class="values">{{order.address}}</p>
+          </div>
+        </div>
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6 p-0">
+            <p class="indicators">Llega:</p>
+          </div>
+          <div class="col-6 p-0">
+            <p class="values">Calc in backend</p>
+          </div>
+        </div>
+        {% else %}
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6 p-0">
+            <p class="indicators">Retiro desde:</p>
+          </div>
+          <div class="col-6 p-0">
+            <p class="values">Nuestro local</p>
+          </div>
+        </div>
+        {% endif %}
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6 p-0">
+            <p class="indicators">Cost:</p>
+          </div>
+          <div class="col-6 p-0">
+            <p class="values text-success">{% if order.shipping_price == 0 %} Gratis {% else %}${{order.shipping_price}}
+              {% endif %}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 finished-block-content-summary">
+        <h6 class="text-center">Resumen </h6>
+        <hr style="width:50%; color: green; margin: 1rem auto; height: 1rem;">
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6">
+            <p class="indicators">Total pagado:</p>
+          </div>
+          <div class="col-6">
+            <p class="total-paid">${{order.total_to_pay}}</p>
+          </div>
+        </div>
+  
+        <div class="row w-100 mx-0 text-center">
+          <div class="col-6">
+            <p class="indicators">Monitoriar pedido: </p>
+          </div>
+          <div class="col-6">
+            <p class="link-info">
+              <a href="#" class="link-info" data-bs-toggle="modal" data-bs-target="#TrackMoveModal">
+                <i class="fa-solid fa-hand-pointer me-1"></i>See details
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+      {% else %}
+        {% if order.status == 'expired'%}
+  <div class="container finished-block">
+    <h3>Esta orden expiro</h3>
+  </div>      
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+</section>
+<div class="modal fade" id="TrackMoveModal" tabindex="-1" aria-labelledby="TrackMoveModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img src="{% static './assets/images/logo-icon/knife-logo.png' %}" alt="Logo Knives" width="50" height="50" class="img-fluid me-3">
+        <h1 class="modal-title fs-5" id="TrackMoveModalLabel">Movimientos de la compra</h1>
+      </div>
+      <div class="modal-body">
+        <div class="row w-100 mx-0 text-center">
+          <small class="text-muted">Esta es un simulacíon de el trakeo del producto comprado dependiendo del estado en el que se encuentre.</small>
+        </div>
+        <div class="row w-100 mx-0 text-center mt-4 mb-1">
+          <div class="col-3">
+            {% if order.status == 'approved'%}
+            <i class="fa-solid fa-circle active"></i>
+            {% elif order.status == 'pending' %}
+            <i class="fa-solid fa-circle pending"></i>
+            {% else %}
+            <i class="fa-solid fa-circle denied"></i>
+            {% endif %}
+          </div>
+          <div class="col-9 text-start">
+            <div class="d-flex justify-content-space-between">
+              <span class="display-7">Pago Recibido</span>
+              {% if order.status == 'approved'%}
+              <span class="text-muted ms-auto me-0"><small>{{order.pay_received_date}}</small></span>
+              {% endif %}
+            </div>
+            
+          </div>
+        </div>
+        <div class="row w-100 mx-0 text-center my-1">
+          <div class="col-3">
+            {% if order.status == 'approved'%}
+            <div class="vl active"></div>
+            {% else %}
+            <div class="vl"></div>
+            {% endif %}
+          </div>
+          <div class="col-9"></div>
+        </div>
+        <div class="row w-100 mx-0 text-center my-1">
+          <div class="col-3">
+            {% if opt2 %}
+            <i class="fa-solid fa-circle activate"></i>
+            {% else %}
+            <i class="fa-solid fa-circle"></i>
+            {% endif %}
+          </div>
+          <div class="col-9 text-start">
+            {% if order.shipping_method == 'local' %}
+            <div class="d-flex justify-content-space-between">
+              <span class="display-7">Listo para ser retirado</span>
+              <span class="text-muted ms-auto me-0"><small>{{opt2_date}}</small></span>
+            </div>
+            {% else %}
+            <div class="d-flex justify-content-space-between">
+              <span class="display-7">Enviado paquete al correo</span>
+              <span class="text-muted ms-auto me-0"><small>{{opt2_date}}</small></span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="row w-100 mx-0 text-center my-1">
+          <div class="col-3">
+            {% if opt3 %}
+            <div class="vl activate"></div>
+            {% else %}
+            <div class="vl"></div>
+            {% endif %}
+          </div>
+          <div class="col-9"></div>
+        </div>
+        <div class="row w-100 mx-0 text-center my-1">
+          <div class="col-3">
+            {% if opt_3 %}
+            <i class="fa-solid fa-circle activate"></i>
+            {% else %}
+            <i class="fa-solid fa-circle"></i>
+            {% endif %}
+          </div>
+          <div class="col-9 text-start">
+            {% if order.shipping_method == 'local' %}
+            <div class="d-flex justify-content-space-between">
+              <span class="display-7">Producto retirado</span>
+              <span class="text-muted ms-auto me-0"><small>{{opt3_date}}</small></span>
+            </div>
+            {% else %}
+            <div class="d-flex justify-content-space-between">
+              <span class="display-7">Enviado paquete a su domicilio</span>
+              <span class="text-muted ms-auto me-0"><small>{{opt3_date}}</small></span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% if order.shipping_method == 'local' %}
+        {% else %}
+        <div class="row w-100 mx-0 text-center my-1">
+          <div class="col-3">
+            {% if opt3 %}
+            <div class="vl activate"></div>
+            {% else %}
+            <div class="vl"></div>
+            {% endif %}
+          </div>
+          <div class="col-9"></div>
+        </div>
+        <div class="row w-100 mx-0 text-center my-1">
+          <div class="col-3">
+            {% if opt_4 %}
+            <i class="fa-solid fa-circle activate"></i>
+            {% else %}
+            <i class="fa-solid fa-circle"></i>
+            {% endif %}
+          </div>
+          <div class="col-9 text-start">
+            <div class="d-flex justify-content-space-between">
+              <span class="display-7">Producto recibido</span>
+              <span class="text-muted ms-auto me-0"><small>{{opt4_date}}</small></span>
+            </div>
+          </div>
+        </div>
+        {% endif%}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block script-ext %}
+  {% if order.status == 'pending' %}
+<script type="text/javascript">
+  const TokenOrder = "{{order.token}}"
+</script>
+
+<script src="{% static 'assets/js/payment/process-payment.js'%}"></script>
+  {% endif %}
+{% endblock script-ext%}

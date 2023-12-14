@@ -1,0 +1,67 @@
+{% extends 'main.html' %}
+
+{% block title %} Mis direcciones / {% endblock title %}
+{% load static %}
+{% block content %}
+<section id="addresses">
+  <div class="container my-3">
+    <h3 class="text-start">Mis Direcciones</h3>
+    <small class="text-muted">Seleccione una de sus direcciones</small>
+    {% if addresses|length == 0 %}
+    <div class="row text-center my-4">
+      <h5>No tiene ninguna dirección registrada</h5>
+      <a href="{% url 'add-address' token %}" class="text-info">Agrege su dirección!</a>
+    </div>
+    {% else %}
+    <div class="row text-end">
+      <a href="{% url 'add-address' token %}" class="link-secondary h5"><i class="fa-regular fa-paper-plane mx-2"></i> Agregar una nueva dirección</a>
+    </div>
+    <form action="" method="post" id="select-address">
+      {% csrf_token %}
+      {% for address in addresses%}
+      <div class="row">
+        <div class="form-check buy-info-shipping-kind-address" id="{{address.id}}" style="display: flex;">
+          <input class="form-check-input border-2" type="radio" name="choosen_address" id="{{address}}" tabindex="1" 
+            style="font-size: 1.5rem;" value="{{address.id}}">
+          <label class="form-check-label m-2" for="{{address}}" >
+            {{address}} 
+          </label>
+          <div class="m-0 ms-auto">
+            <a href="{% url 'edit-address' token address.id %}" class="btn link-info text-end mx-3"><i class="fa-solid fa-pencil"></i> Edit</a>
+            
+            <button type="button" class="btn link-danger text-end delete-address-btn" data-address-id="{{address.id}}"><i class="fa-solid fa-trash"></i> Eliminar</button>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-gradient w-25">Continuar</button>
+      </div>
+    </form>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock content %}
+
+{% block script-ext %}
+<script type="text/javascript">
+  $(document).ready(function () {
+      $('#select-address').submit(function (event) {
+        event.preventDefault(); // prevent the form from submitting
+
+        if ($('input[name="choosen_address"]:checked').length === 0) {
+          var alertBox = $('<div class="alert alert-danger  alert-dismissible" role="alert">Please select an option<button type="button" class="btn-close bg-secondary rounded-start-0" data-bs-dismiss="alert" aria-label="Close"></button></div>'); // create an alert box with the alert-danger class
+          $('#select-address').prepend(alertBox); // add the alert box to the beginning of the form
+        } else {
+          this.submit(); // submit the form if a radio button is checked
+        }
+      });
+    });
+</script>
+<script src="{% static 'assets/js/payment/address-del.js' %}"></script>
+<script type="text/javascript">
+  const OrderToken = '{{token}}';
+</script>
+
+{% endblock script-ext%}

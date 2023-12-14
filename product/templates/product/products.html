@@ -1,0 +1,419 @@
+{% extends 'main.html'%}
+
+{% block title %} Productos / {% endblock title %}
+{% load static %}
+{% block content %}
+<div id="alertContainer"></div>
+<section id="products" class="products" style="min-height: 60vh;">
+  
+  <div class="container-fluid">
+    <!-- Open/Close filter  -->
+    <div class="row text-center">
+      <a class="text-decoration-none collapaser" data-bs-toggle="collapse" href="#filters" role="button"
+        aria-expanded="false" aria-controls="filters">
+        <h3 class="display-6 open mt-2 text-end">
+          Filtrar Productos <i class="fa-solid fa-circle-plus text-secondary fs-4"></i>
+        </h3>
+        <h3 class="display-6 close text-secondary mt-2 text-end mt-3">
+          Filtrar Productos <i class="fa-solid fa-circle-minus text-primary fs-4"></i>
+        </h3>
+      </a>
+      <!-- Order by -->
+      <div class="dropdown text-end">
+        <a class="link-info dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
+          Ordenar por
+        </a>
+        <ul class="dropdown-menu">
+          {% if price__lte%}
+          <li><a class="dropdown-item" href="{{request.META.PATH_INFO}}?price__gte={{price__gte}}&price__lte={{price__lte}}">Mas relevante</a></li>
+          <li><a class="dropdown-item" href="{{request.META.PATH_INFO}}?price__gte={{price__gte}}&price__lte={{price__lte}}&sort=lp">Menor precio</a></li>
+          <li><a class="dropdown-item" href="{{request.META.PATH_INFO}}?price__gte={{price__gte}}&price__lte={{price__lte}}&sort=hp">Mayor precio</a></li>
+          {%else%}
+          <li><a class="dropdown-item" href="{{request.META.PATH_INFO}}">Mas relevante</a></li>
+          <li><a class="dropdown-item" href="{{request.META.PATH_INFO}}?sort=lp">Menor precio</a></li>
+          <li><a class="dropdown-item" href="{{request.META.PATH_INFO}}?sort=hp">Mayor precio</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <!-- Filters -->
+      <div class="col-12 col-md-3 products-filters collapse" id="filters">
+        <!-- Filter by categories -->
+        <div class="row text-start products-filters-category">
+          <div class="btn-group dropdown-center">
+            <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <h5 class="display-7 d-inline">Categorias</h5>
+            </button>
+            <ul class="dropdown-menu">
+              {% for cate in categories%}
+              <li><a href="{% url 'products_by_category' cate.name %}"
+                  class="dropdown-item text-white">{{cate.name|capfirst}}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <form action="" method="get">  
+          <!-- Filter by price -->
+          <div class="row text-start products-filters-price mb-4">
+            <h6 class="display-7">Precio</h6>
+            <ul class="list-unstyle">
+              <li><a href="?price__gte=0&price__lte=50000">Hasta $50000 <p>(300)</p></a></li>
+              <li><a href="?price__gte=0&price__lte=75000">Hasta $75000 <p>(450)</p></a></li>
+              <li><a href="?price__gte=0&price__lte=120000">Hasta $120000 <p>(700)</p></a></li>
+              <!-- Range Price -->
+              <li class="mt-3">
+                <form action="">
+                  <h6 class="text-muted">Personalizado:</h6 class="text-muted">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="input-group mb-3">
+                        <span class="input-group-text">Min $</span>
+                        <input type="number" class="form-control border-secondary rounded-2 w-50" name="price__gte" id="id_price__gte"
+                          aria-label="Amount minimum" min="0" max="{{max_price}}" value="0">
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="input-group mb-3">
+                        <span class="input-group-text">Max $</span>
+                        <input type="number" class="form-control border-secondary rounded-2 w-50" name="price__lte" id="id_price__lte"
+                          aria-label="Amount maximum" min="0" max="{{max_price}}" value="{{max_price}}">
+                      </div>
+                    </div>
+                  </div>
+
+                  &nbsp;
+
+
+                  <button type="submit" class="btn btn-outline-secondary position-relative start-50">Buscar</button>
+              
+              </li>
+            </ul>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+    {% if request.user.is_staff %}
+    <div class="row text-center d-flex justify-content-center m-0 mt-2 px-2 w-100">
+      <a href="{% url 'add-product' %}" class="btn btn-outline-secondary w-25 d-block rounded-end-0 ">Agregar Producto</a>
+      <a href="#" class="btn btn-outline-primary w-25 d-block rounded-end-0 rounded-start-0" data-bs-toggle="modal"
+        data-bs-target="#addCategory">Agregar Categoria</a>
+      <a href="#" class="btn btn-outline-secondary w-25 d-block rounded-end-0 rounded-start-0" data-bs-toggle="modal"
+        data-bs-target="#addHandle">Agregar Empuñadura</a>
+      <a href="#" class="btn btn-outline-primary w-25 d-block rounded-start-0" data-bs-toggle="modal"
+        data-bs-target="#addDisCode">Agregar Codigo de descuento</a>
+    </div>
+    <!-- Modal Category -->
+    <div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="addCategoryLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="addCategoryLabel">Crear Categoria</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form action="{% url 'add-category' %}" id="create-category" method="post">
+            {% csrf_token %}
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="id_name" class="form-label fw-2">Nombre</label>
+                <input type="text" name="name" id="id_name" class="form-control border border-secondary"
+                  placeholder="Entry the name of the category that want to add" required>
+              </div>
+              <div class="mb-3">
+                <label for="id_description" class="form-label fw-2">Descripción</label>
+                <textarea name="description" id="id_description" rows="3" class="form-control border border-secondary"
+                  placeholder="OPTIONAL. Add a little description of the category" maxlength="200"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-secondary">Crear</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Handle -->
+    <div class="modal fade" id="addHandle" tabindex="-1" aria-labelledby="addHandleLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="addHandleLabel">Create Handle</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form action="{% url 'add-handle' %}" id="create-handle" method="post">
+            {% csrf_token %}
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="id_material" class="form-label fw-2">Handle material</label>
+                <input type="text" name="material" id="id_material" class="form-control border border-secondary"
+                  placeholder="Entry the material of the handel that want to add" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+              <button type="sumbit" class="btn btn-secondary">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Modal Discount Code -->
+    <div class="modal fade" id="addDisCode" tabindex="-1" aria-labelledby="addDisCodeLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="addDisCodeLabel">Crear Codigo de Descuento</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form action="{% url 'add-discode' %}" id="create-discount" method="post">
+            {% csrf_token %}
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="id_code" class="form-label fw-2">Codigo</label>
+                <input type="text" name="code" id="id_code" class="form-control border border-secondary"
+                  placeholder="Codigo que el usuario debe ingresar para aplicar descuento" required>
+              </div>
+              <div class="row w-100 text-center mb-3 mx-0">
+                <h6 class="display-7">Donde quiere que se aplique el descuento?</h6>
+                <div class="col-12 col-sm-6">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input border border-primary" type="radio" name="discount_kind" id="id_discount_percentage" value="Total" checked>
+                    <label class="form-check-label" for="id_discount_percentage">Descuento en el Total</label>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input border border-primary" type="radio" name="discount_kind" id="id_discount_shipping" value="Shipping">
+                    <label class="form-check-label" for="id_discount_shipping">Descuento en el Envio</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row w-100 text-center mb-3 mx-0">
+                <label for="id_discount" class="form-label fw-2">Porcentage del descuento</label>
+                <input type="number" name="discount" id="id_discount" class="form-control border border-secondary"
+                  placeholder="Procentage el cual sera descontado del total/envio" max="100" required>
+              </div>
+              <div class="row w-100 text-center mb-3 mx-0">
+                <div class="col-12 col-sm-6">
+                  <label for="id_enabled_from" class="form-label">Disponible desde</label>
+                  <input type="date" name="enabled_from" id="id_enabled_from" class="form-control border-secondary" min="{{date_today}}"/>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <label for="id_enabled_to" class="form-label">Disponible hasta</label>
+                  <input type="date" name="enabled_to" id="id_enabled_to" class="form-control border-secondary" min="{{date_today}}"/>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+              <button type="sumbit" class="btn btn-secondary">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    <!-- Products  -->
+    <div class="col-12 products-items">
+      <div class="row text-center w-100 justify-content-center">
+        {% if products|length == 0 %}
+          <h3 class="display-6">
+            There are not products with relationated with: {{query}}
+          </h3>
+          <a href="{% url 'products' %}" class="btn btn-outline-secondary btn-width my-3 mx-auto">Discover our products</a>
+        {% else %}
+          {% for prod in products %}
+        <div class="col-12 col-sm-6 col-lg-4 products-items-each mb-4 ">
+          <div class="card">
+            {% if prod.stock == False%}
+            <div class="sin-stock">
+              <small>Sin Stock</small>
+            </div>
+            {% endif %}
+            <a href="{% url 'prod' prod.name %}" class="">
+              <img src=" {% get_media_prefix%}{{prod.img_primary}}" class="card-img-top" alt="Product Bowie">
+              <div class="card-body">
+
+                <h5 class="card-title text-capitalize">{{prod.name}}</h5>
+                <h5 class="prod-price">${{prod.price}}</h5>
+
+
+                <p class="card-text">
+                  {{prod.description|lower|capfirst|slice:":110"}} ...
+                </p>
+              </div>
+              {% if request.user.is_superuser == True %}
+              <div class="card-footer">
+                <div class="d-inline-block">
+                  <a href="{% url 'edit-product' prod.id %}" class="link-info mx-2"><i class="fa-solid fa-pencil"></i>
+                    Editar</a>
+                  <a href="#" class="link-danger mx-2"><i class="fa-solid fa-trash"></i> Delete</a>
+                </div>
+              </div>
+              {% else %}
+                {% if request.user.is_staff and prod.add_by == request.user %}
+              <div class="card-footer">
+                <div class="d-inline-block">
+                  <a href="{% url 'edit-product' prod.id %}" class="link-info mx-2"><i class="fa-solid fa-pencil"></i>
+                    Editar</a>
+                  <a href="#" class="link-danger mx-2"><i class="fa-solid fa-trash"></i> Delete</a>
+                </div>
+              </div>
+                {% endif %}
+              {% endif %}
+            </a>
+          </div>
+        </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Paggination -->
+    
+    <div class="row text-center pt-5" style="margin: 0 !important;">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          {% if products.has_previous %}
+            {% if sort_by != '' %}
+              {% if price__lte %}
+          <li class="page-item">
+            <a href="?p={{products.previous_page_number}}&price__gte={{price__gte}}&price__lte={{price__lte}}&sort={{sort_by}}" class="page-link">Prev</a>
+          </li>
+              {% else %}
+          <li class="page-item">
+            <a href="?p={{products.previous_page_number}}&sort={{sort_by}}" class="page-link">Prev</a>
+          </li>
+              {% endif %}
+            {% else %}
+              {% if price__lte %}
+          <li class="page-item">
+            <a href="?p={{products.previous_page_number}}&price__gte={{price__gte}}&price__lte={{price__lte}}" class="page-link">Prev</a>
+          </li>
+              {% else %}
+          <li class="page-item">
+            <a href="?p={{products.previous_page_number}}" class="page-link">Prev</a>
+          </li>
+              {% endif %}
+            {% endif %}
+          {% else %}
+          <li class="page-item disabled">
+            <a href="" class="page-link">Prev</a>
+          </li>
+          {% endif %}
+          {% if products.paginator.num_pages < 4 %}
+            {% if sort_by != '' %}
+              {% if price__lte%}
+          <li class="page-item mx-1 active">
+            <a class="page-link"
+              href="{{request.META.PAGE_INFO}}?p={{products.number}}&price__gte={{price__gte}}&price__lte={{price__lte}}&sort={{sort_by}}">{{products.number}}</a>
+          </li>    
+              {% else %}
+          <li class="page-item mx-1 active">
+            <a class="page-link"
+              href="{{request.META.PAGE_INFO}}?p={{products.number}}&sort={{sort_by}}">{{products.number}}</a>
+          </li>
+              {% endif %}
+            {% else %}
+              {% if price__lte %}
+          <li class="page-item mx-1 active">
+            <a class="page-link" href="{{request.META.PAGE_INFO}}?p={{products.number}}&price__gte={{price__gte}}&price__lte={{price__lte}}">{{products.number}}</a>
+          </li>
+              {% else %}
+          <li class="page-item mx-1 active">
+            <a class="page-link" href="{{request.META.PAGE_INFO}}?p={{products.number}}">{{products.number}}</a>
+          </li>
+              {% endif %}
+            {% endif %}
+          {% else %}
+            {% if sort_by != '' %}
+              {% if price__lte %}
+          <li class="page-item mx-1"><a class="page-link" href="{{request.META.PAGE_INFO}}?p=1&price__gte={{price__gte}}&price__lte={{price__lte}}&sort={{sort_by}}">1</a></li>
+          <li class="page-separate mx-1">...</li>
+          <li class="page-item mx-1 active">
+            <a class="page-link" href="{{request.META.PAGE_INFO}}?p={{products.number}}&price__gte={{price__gte}}&price__lte={{price__lte}}&sort={{sort_by}}">{{products.number}}</a>
+          </li>
+          <li class="page-separate mx-1">...</li>
+          <li class="page-item mx-1">
+            <a class="page-link"
+              href="{{request.META.PAGE_INFO}}?p={{products.paginator.num_pages}}&price__gte={{price__gte}}&price__lte={{price__lte}}&sort={{sort_by}}">{{products.paginator.num_pages}}</a>
+          </li>
+              {% else %}
+          <li class="page-item mx-1"><a class="page-link" href="{{request.META.PAGE_INFO}}?p=1&sort={{sort_by}}">1</a></li>
+          <li class="page-separate mx-1">...</li>
+          <li class="page-item mx-1 active">
+            <a class="page-link"
+              href="{{request.META.PAGE_INFO}}?p={{products.number}}&sort={{sort_by}}">{{products.number}}</a>
+          </li>
+          <li class="page-separate mx-1">...</li>
+          <li class="page-item mx-1">
+            <a class="page-link"
+              href="{{request.META.PAGE_INFO}}?p={{products.paginator.num_pages}}&sort={{sort_by}}">{{products.paginator.num_pages}}</a>
+          </li>
+              {% endif %}
+            {% else %}
+              {% if price__lte %}
+          <li class="page-item mx-1"><a class="page-link" href="{{request.META.PAGE_INFO}}?p=1&price__gte={{price__gte}}&price__lte={{price__lte}}">1</a></li>
+          <li class="page-separate mx-1">...</li>
+          <li class="page-item mx-1 active">
+            <a class="page-link" href="{{request.META.PAGE_INFO}}?p={{products.number}}&price__gte={{price__gte}}&price__lte={{price__lte}}">{{products.number}}</a>
+          </li>
+          <li class="page-separate mx-1">...</li>
+          <li class="page-item mx-1">
+            <a class="page-link"
+              href="{{request.META.PAGE_INFO}}?p={{products.paginator.num_pages}}&price__gte={{price__gte}}&price__lte={{price__lte}}">{{products.paginator.num_pages}}</a>
+          </li>
+              {% else %}
+          <li class="page-item mx-1"><a class="page-link" href="{{request.META.PAGE_INFO}}?p=1">1</a></li>
+          <li class="page-separate mx-1">...</li>
+          <li class="page-item mx-1 active">
+            <a class="page-link" href="{{request.META.PAGE_INFO}}?p={{products.number}}">{{products.number}}</a>
+          </li>
+          <li class="page-separate mx-1">...</li>
+          <li class="page-item mx-1">
+            <a class="page-link"
+              href="{{request.META.PAGE_INFO}}?p={{products.paginator.num_pages}}">{{products.paginator.num_pages}}</a>
+          </li>
+              {% endif %}
+            {% endif %}
+          {% endif %}
+
+          {% if products.has_next %}
+            {%if sort_by != '' %}
+              {% if price__lte %}
+          <li class="page-item mx-1">
+            <a class="page-link" href="?p={{products.next_page_number}}&sort={{sort_by}}&price__gte={{price__gte}}&price__lte={{price__lte}}">Next</a>
+          </li>
+              {% else %}
+          <li class="page-item mx-1">
+            <a class="page-link" href="?p={{products.next_page_number}}&sort={{sort_by}}">Next</a>
+          </li>
+              {% endif %}
+            {% else %}
+              {% if price__lte %}
+          <li class="page-item mx-1">
+            <a class="page-link" href="?p={{products.next_page_number}}&price__gte={{price__gte}}&price__lte={{price__lte}}">Next</a>
+          </li>
+              {% else %}
+          <li class="page-item mx-1">
+            <a class="page-link" href="?p={{products.next_page_number}}">Next</a>
+          </li>
+              {% endif %}
+            {% endif %}
+          {% else %}
+          <li class="page-item mx-1 disabled">
+            <a class="page-link" href="">Next</a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</section>
+{% endblock content %}
+
+{% block script-ext %}
+<script src="{% static 'assets/js/create-dym.js'%}"></script>
+{% endblock script-ext%}

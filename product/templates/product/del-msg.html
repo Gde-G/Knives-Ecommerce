@@ -1,0 +1,26 @@
+<div class="modal fade" id="delMsgModal{{msg.id}}" tabindex="-1" aria-labelledby="delMsgModal{{msg.id}}Label" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text-center" id="delMsgLabelLabel">Delete Message </h1>
+      </div>
+      <form action="{% url 'del-msg' msg.id %}" method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+          <h5 class="display-7">Are you sure to delete the message?</h5>
+          <hr style="width:50%; margin:0 auto;">
+          <p class="d-block"><span class="h5 text-muted">Message:</span> &nbsp; {{msg.body}}</p>
+          <p class="d-block"><span class="h6 text-muted">User that make it:</span> &nbsp; {{msg.user}}</p>
+  
+        </div>
+  
+        <div class="modal-footer">
+          <a href="{{request.META.HTTP_REFERER}}" class="btn btn-outline-primary mx-3">Close</a>
+          <button type="submit" class="btn btn-outline-secondary mx-3">Confirm</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% load static %}
+

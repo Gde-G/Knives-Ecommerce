@@ -1,0 +1,67 @@
+{% extends "main.html" %}
+
+{% load i18n %}
+{% load static %}
+{% load socialaccount %}
+{% block content %}
+<section id="social-connections">
+  <div class="container my-4">
+    <div class="row text-center">
+      <h2 class="display-4 text-capitalize">Cuenta vinculada con:</h2>
+    </div>
+    <div class="row text-center">
+      {% if form.accounts %}
+      <p>Puede iniciar sesión en su cuenta utilizando cualquiera de las siguientes cuentas de terceros:</p>
+      <small class="text-muted">Puede desvincularla seleccionando la cuenta y el boton "Elimiar"</small>
+      <form method="post" action="{% url 'socialaccount_connections' %}">
+        {% csrf_token %}
+        <fieldset>
+          <div class="row my-5">
+            {% for base_account in form.accounts %}
+              {% with base_account.get_provider_account as account %}
+            <div class="col-12 col-sm-4 py-3" style="background-color: rgb(228, 201, 201); border: 2px solid rgb(141, 40, 0); border-radius: 5px;">
+              <label for="id_account_{{ base_account.id }}">
+                <input id="id_account_{{ base_account.id }}" type="radio" name="account" value="{{ base_account.id }}"
+                  class="form-check-input border-2 border-secondary" />
+                {% if account.get_brand.name == 'Google' %}  
+                <span class="socialaccount_provider {{ base_account.provider }} {{ account.get_brand.id }}"><i class="fa-brands fa-google me-2"></i></span>
+                {% else %}
+                <span class="socialaccount_provider {{ base_account.provider }} {{ account.get_brand.id }}"><i class="fa-brands fa-facebook me-2"></i></span>
+                {% endif %}
+                {{ account }}
+              </label>
+            </div>
+              {% endwith %}
+            {% endfor %}
+            <div>
+              <button type="submit" class="btn btn-danger my-5">Eliminar</button>
+            </div>
+          </div>
+        </fieldset>
+        
+      </form>
+      
+      {% else %}
+      <p class="fs-3">Actualmente no tiene cuentas de redes sociales conectadas a esta cuenta.</p>
+      {% endif %}
+    </div>
+    <hr>
+    <div class="row text-center w-100" style="background-color: rgb(252, 222, 184);">
+      <h2 class="display-4 text-capitalize">Vincular su cuenta con :</h2>
+      
+      <div class="row text-center mb-5">
+      <div class="col-12 col-sm-6">
+        <a href="{% provider_login_url 'google'%}?process=connect" class="btn btn-light border-2 border-dark sign-in-others"><img src="{% static 'assets/images/icons/logo-google.png'%}" width="30" height="30" alt=""> Registrarse con Google</a>
+      </div>
+      <div class="col-12 col-sm-6">
+        <a href="{% provider_login_url 'facebook'%}?process=connect" class="btn btn-info border-2 border-dark sign-in-others"><i class="fa-brands fa-facebook me-2"></i>Registrarse con
+          Facebook</a>
+      </div>
+    </div>
+      
+      {% include "socialaccount/snippets/login_extra.html" %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

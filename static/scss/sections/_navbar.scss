@@ -1,0 +1,74 @@
+@use '../custom' as *;
+nav.navbar.main-nav {
+    background-color: $black;
+    box-shadow: 1px 3px 5px 0px rgba($red-dark, 0.59);
+    -webkit-box-shadow: 1px 3px 5px 0px rgba($red-dark, 0.59);
+    -moz-box-shadow: 1px 3px 5px 0px rgba($red-dark, 0.59);
+
+    .navbar-brand {
+        width: 3rem;
+        height: auto;
+    }
+
+    .navbar-toggler {
+        background: $secondary;
+        border: 0.1rem solid $gray-600;
+        width: 2.6rem;
+        height: 2.6rem;
+        border-radius: 50%;
+
+        *i {
+            margin: auto;
+            font-size: 1.9rem;
+            color: $gray-300;
+        }
+    }
+
+    *.nav-item {
+        margin: 0 1rem;
+
+        &:hover {
+            color: $secondary;
+        }
+    }
+
+    .navbar-user {
+        margin: auto .3rem;
+        color: $white;
+        text-transform: capitalize;
+
+        button {
+            font-size: 1rem;
+            transition: all 0.3s linear;
+
+            &:hover,
+            &:active {
+                background-color: $primary;
+                color: $white;
+                font-size: 1.1rem;
+                font-weight: 400;
+            }
+        }
+    }
+}
+
+nav.navbar.staff-nav{
+    background-color: rgba($secondary, 0.3);
+    color: $white;
+    
+    .breadcrumb{
+        background-color: rgba($primary, 0.4);
+        padding: 0.2rem 1rem;
+        margin-right: 1rem;
+        border: 1px solid $secondary;
+        border-radius: 5px;
+        &-item a{
+            color: $gray-200;
+            text-decoration: none;
+            :active{
+                font-weight: 700;
+                color: $white;
+            }
+        }
+    }
+}

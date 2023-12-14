@@ -1,0 +1,8 @@
+@use '../custom' as *;
+@use '../components/mixins' as *;
+
+.handle {
+    .img-cardio {
+        height: 15rem
+    }
+}

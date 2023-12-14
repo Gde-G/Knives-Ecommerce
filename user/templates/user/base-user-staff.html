@@ -1,0 +1,102 @@
+{% extends 'main.html' %}
+
+{% load static %}
+{% block content %}
+<section id="sign-up-staff">
+  <div class="container-fluid p-0">
+    <div class="row w-100 m-0">
+      <div class="col-12 col-md-5 col-lg-4 staff-docs">
+        <nav id="navbar-example2" class="nav nav-tabs bg-secondary px-1 py-2 mb-2" style="justify-content: center;">
+          <ul class="nav nav-pills text-white" role="tablist">
+            <li class="nav-item mx-1">
+              <a class="nav-link text-white" href="#IntroductionScroll">Introducción</a>
+            </li>
+            <li class="nav-item mx-1">
+              <a class="nav-link text-white" href="#PermissionsScroll">Permisos</a>
+            </li>
+            <li class="nav-item mx-1">
+              <a class="nav-link text-white" href="#UsageScroll">Uso</a>
+            </li>
+
+          </ul>
+        </nav>
+        <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%"
+          data-bs-smooth-scroll="true" class="scrollspy-data bg-body-tertiary p-3 rounded-2" tabindex="0">
+
+          <h4 class="underline-secondary" id="IntroductionScroll">Introducción</h4>
+          <p>
+            Desde Knives Ecommerce Simulation, le proporcionamos la posibilidad de crear
+            un usuario con rango de "Staff" para poder brindarle una mayor experiencia y
+            descubra las capacidades de <a href="" class="link-secondary text-decorantion-none">GdeG</a> como
+            desarrollador.
+          </p>
+          <p>
+            Para poder preservar la experiencia de otros usuarios agregamos algunas
+            restricciones. La sesión del usuario con rango de "Staff" dura 1 hs, desde
+            la selección del rango, o cuando se cierre sesión de la cuenta. Pasado el
+            tiempo se le inhabilitara el usuario y se eliminaran todos los cambios que se hayan realizado el
+            mismo, con el proposito de preservar la experencia de otros usuarios manteniendo la bases del proyecto.
+          </p>
+          <h4 class="underline-secondary" id="PermissionsScroll">Permisos otorgados</h4>
+          <p>
+          <ul class="perm-list">
+            <strong>Categorias propios:</strong>
+            <li>Crear, Leer, Modificar, Eliminar</li>
+            <strong>Categorias Ajenos:</strong>
+            <li>Leer</li>
+            <hr>
+            <strong>Empuñaduras propios:</strong>
+            <li>Crear, Leer, Modificar, Eliminar</li>
+            <strong>Empuñaduras Ajenos:</strong>
+            <li>Leer</li>
+            <hr>
+            <strong>Productos propios:</strong>
+            <li>Crear, Leer, Modificar, Eliminar</li>
+            <strong>Productos Ajenos:</strong>
+            <li>Leer</li>
+            <hr>
+            <strong>Mensajes Propios:</strong>
+            <li>Crear, Leer, Modificar, Eliminar</li>
+            <strong>Mensajes Ajenos:</strong>
+            <li>Leer</li>
+            <strong>Respuestas propias a Mensajes Ajenos:</strong>
+            <li>Crear, Leer, Modificar, Eliminar</li>
+            <strong>Respuestas a Mensajes Ajenos:</strong>
+            <li>Leer</li>
+            <hr>
+            <strong>Codigos de Descuento Propios:</strong>
+            <li>Crear, Leer, Modificar, Eliminar</li>
+            <strong>Codigos de Descuento Ajenos:</strong>
+            <li>Leer</li>
+            <hr>
+            <strong>Productos Comprados por los usuarios:</strong>
+            <li>Leer</li>
+          </ul>
+          </p>
+          <h4 class="underline-secondary" id="UsageScroll">Uso y Comportamiento</h4>
+          <p>El uso de las funciones de "Staff" es muy intuitivo. Únicamente para los usuarios con este rol, aparecerán
+            botones en
+            las correspondientes secciones de la aplicación web, además le brindamos un "Staff Dashbord" donde podrán
+            acceder a la
+            información y funcionalidades en un solo lugar. Al Dashbord acceden desde la barra de navegación, apretando
+            el botón
+            cuál tiene el nombre de usuario, el cual desplegara un menú en el cual tendrá que cliquear la opción de
+            "Staff
+            Dashbord".
+          </p>
+          <p>¡Ante cualquier consulta no dude en contactarnos!</p>
+        </div>
+      </div>
+      <div class="col-12 col-md-7 col-lg-8 staff-setup">
+        {% block staff-content %}
+        {% endblock staff-content %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}
+
+{% block script-ext %}
+{% block staff-script-ext %}
+{% endblock staff-script-ext %}
+{% endblock script-ext %}

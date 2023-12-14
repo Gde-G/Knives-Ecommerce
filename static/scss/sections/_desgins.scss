@@ -1,0 +1,48 @@
+@use '../custom' as *;
+@use '../components/mixins' as *;
+
+
+
+.design {
+    &-cont {
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+
+        @media (min-width: 768px) {
+            justify-content: end;
+        }
+
+        &-img {
+            width: auto;
+            max-height: 18rem;
+            margin-top: 2rem;
+            border-radius: 5px;
+
+            @media (min-width: 768px) {
+                max-height: 27rem;
+            }
+        }
+    }
+
+    &-type-btn {
+        width: 45%;
+        height: auto;
+
+        @media (min-width: 560px) {
+            width: 20%;
+        }
+
+        &-sizes {
+            width: 45%;
+            height: auto;
+            opacity: 0.9;
+
+            &:hover {
+                opacity: 1;
+                color: $white !important;
+            }
+        }
+    }
+
+}

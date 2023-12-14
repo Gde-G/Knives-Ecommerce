@@ -1,0 +1,94 @@
+@use '../custom' as *;
+@use '../components/mixins' as *;
+
+
+//INTRO  
+#intro {
+    padding: 2rem 0 4rem 0;
+
+    .carousel {
+        vertical-align: middle;
+
+        &-inner {
+            width: 100%;
+            max-height: 45vh;
+            min-height: 30vh;
+            overflow: hidden;
+            object-fit: cover;
+        }
+    }
+}
+
+//Products
+#products {
+    position: relative;
+
+    *.products-btn,
+    *.products-btn-down {
+        margin: 1rem 0.5rem;
+        font-size: .7rem;
+
+        @include media-breakpoint-up(sm) {
+            font-size: 1rem;
+        }
+
+        @include media-breakpoint-up(md) {
+            font-size: 1.2rem;
+        }
+
+        @include media-breakpoint-up(lg) {
+            font-size: 1.5rem;
+        }
+    }
+
+    *.products-btn-down {
+        background: none;
+        background-image: $secondaryToPrimaryGradient;
+        background-clip: text;
+        color: transparent;
+        border: 1px solid;
+        border-image-slice: 1;
+        border-width: 1px;
+        border-image-source: $secondaryToPrimaryGradient;
+        border-radius: 50%;
+
+        &:hover {
+            @include BGsecondaryToPrimaryGradient;
+            color: $white;
+
+        }
+    }
+}
+
+#SelectTestType{
+    .cont-logo-title{
+        width: 50px;
+        height: 50px;
+        background-color: $white;
+        box-shadow: 1px 1px 6px 6px $secondary;
+        -webkit-box-shadow: 1px 1px 6px 6px $secondary;
+        -moz-box-shadow: 1px 1px 6px 6px $secondary;
+        border-radius: 50%;
+        object-position: center;
+        overflow: hidden;
+
+        @media (min-width: 375px) {
+                width: 70px;
+                height: 70px;
+            }
+        @media (min-width: 500px){
+            width: 100px;
+            height: 100px;
+        }
+        &.gdg{
+            background-color: inherit;
+            box-shadow: none;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+        }
+    }
+    .logo-title {
+        width: 100%;
+        border-radius: 50%;
+    }
+}

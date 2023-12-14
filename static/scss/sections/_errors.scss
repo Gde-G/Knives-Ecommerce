@@ -1,0 +1,40 @@
+@use '../custom' as *;
+
+#e-404 {
+    width: 100%;
+
+    @media (min-width: 568px) {
+        padding-top: 0.8rem;
+    }
+    .img404{
+        width: 400px;
+        height: auto;
+        margin: 1rem auto;
+    }
+    
+}
+#e-500 {
+    margin: 1rem 0;
+    width: 100%;
+
+    .img500 {
+        width: 400px;
+        height: auto;
+        margin: 1rem auto;
+
+    }
+}
+
+#e-403{
+    width: 100%;
+    
+    @media (min-width: 568px) {
+        padding-top: 0.8rem;
+    }
+    
+    .img403 {
+        width: 400px;
+        height: auto;
+        margin: 1rem auto;
+    }
+}

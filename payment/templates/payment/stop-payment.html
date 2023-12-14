@@ -1,0 +1,30 @@
+{% extends 'main.html' %}
+
+{% block title %} Proceso terminado /{% endblock title %}
+
+{% block content %}
+<div class="container stop-payment">
+  <div class="row text-center">
+    <span class="stop-payment-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
+    <h3 class="display-5 m-0 p-0">Proceso de checkout detenido</h3>
+  </div>
+  <div class="row text-center my-2">
+    <p>El objetivo de esta aplicación web es mostrar mis habilidades como desarrollador y permitirles explorar el
+    uno de mis proyectos.</p>
+    <p>He decidido no incorporar un gateway o sitema de pago, para evitar cualquier posibilidad de que alguien realice una compra sin comprender
+    completamente el propósito de esta aplicación web. De este modo evitar que alguien se sienta engañado.</p>
+    <p>Agradezco tu comprensión. Espero que disfrutes de tu visita y que puedas apreciar las
+    habilidades y el trabajo que he puesto en este aplicación web.</p>
+  </div>
+  <div class="d-flex justify-content-center mt-3 mb-5">
+    
+    <a href="{% url 'home' %}" class="btn btn-gradient w-50">Seguir recorriendo la web</a>
+  </div>
+</div>
+{% endblock content %}
+
+{% block script-ext %}
+<script type="text/javascript">
+  document.body.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+</script>
+{% endblock script-ext %}
