@@ -111,7 +111,7 @@ class Product(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    publish_date = models.DateTimeField(default=timezone.now())
+    publish_date = models.DateTimeField(default=timezone.now)
 
     def save(self, *args, **kwargs):
         self.name = self.name.lower()

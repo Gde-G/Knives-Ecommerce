@@ -54,14 +54,14 @@ INSTALLED_APPS = [
     'fontawesomefree',
     'guardian',
 
-
     'django.contrib.sites',
 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.facebook',
+
+    'storages',
 ]
 
 
@@ -258,28 +258,6 @@ SOCIALACCOUNT_PROVIDERS = {
         },
         'OAUTH_PKCE_ENABLED': True,
     },
-    'facebook': {
-        'METHOD': 'oauth2',
-        'SDK_URL': '//connect.facebook.net/{locale}/sdk.js',
-        'SCOPE': ['email', 'public_profile'],
-        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
-        'INIT_PARAMS': {'cookie': True},
-        'FIELDS': [
-            'id',
-            'first_name',
-            'last_name',
-            'middle_name',
-            'name',
-            'name_format',
-            'picture',
-            'short_name'
-        ],
-        'EXCHANGE_TOKEN': True,
-        # 'LOCALE_FUNC': 'path.to.callable',
-        'VERIFIED_EMAIL': False,
-        'VERSION': 'v13.0',
-        'GRAPH_API_URL': 'https://graph.facebook.com/v13.0',
-    }
 }
 
 ACCOUNT_FORMS = {
@@ -301,9 +279,9 @@ JAZZMIN_SETTINGS = {
     "site_title": "Panel de Staff",
     "site_header": "Knives Ecommerce",
     "site_brand": "Knives Ecommerce",
-    "site_logo": "/assets/images/logo-icon/knife-icon-bg.png",
+    "site_logo": "assets/images/logo-icon/knife-icon-bg.png",
     "site_logo_classes": "admin-logo",
-    "site_icon": "/assets/images/logo-icon/knife-icon.png",
+    "site_icon": "assets/images/logo-icon/knife-icon.png",
     "copyright": "Knives Ecommerce",
     "user_avatar": "profile_img",
     "related_modal_active": True,
@@ -346,7 +324,7 @@ JAZZMIN_SETTINGS = {
     #################
 
     "related_modal_active": True,
-    "custom_css": "/scss/style-admin.css",
+    "custom_css": "scss/style-admin.css",
 }
 
 JAZZMIN_UI_TWEAKS = {
@@ -380,4 +358,27 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success"
     },
     "actions_sticky_top": False
+}
+
+
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID') 
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY') 
+				
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME') 
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_FILE_OVERWRITE = bool(int(os.environ.get('AWS_S3_FILE_OVERWRITE')))
+
+STATIC_URL = f'{AWS_S3_CUSTOM_DOMAIN}/static/'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+MEDIA_ROOT = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+
+STORAGES = {
+    #Media files management
+    "default": {
+        "BACKEND": "knife.storage_backends.MediaStorage"
+    },
+    # Staticfiles
+    "staticfiles":{
+        "BACKEND": "knife.storage_backends.StaticStorage"
+    },
 }

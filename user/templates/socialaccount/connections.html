@@ -25,9 +25,6 @@
                   class="form-check-input border-2 border-secondary" />
                 {% if account.get_brand.name == 'Google' %}  
                 <span class="socialaccount_provider {{ base_account.provider }} {{ account.get_brand.id }}"><i class="fa-brands fa-google me-2"></i></span>
-                {% else %}
-                <span class="socialaccount_provider {{ base_account.provider }} {{ account.get_brand.id }}"><i class="fa-brands fa-facebook me-2"></i></span>
-                {% endif %}
                 {{ account }}
               </label>
             </div>
@@ -52,10 +49,6 @@
       <div class="row text-center mb-5">
       <div class="col-12 col-sm-6">
         <a href="{% provider_login_url 'google'%}?process=connect" class="btn btn-light border-2 border-dark sign-in-others"><img src="{% static 'assets/images/icons/logo-google.png'%}" width="30" height="30" alt=""> Registrarse con Google</a>
-      </div>
-      <div class="col-12 col-sm-6">
-        <a href="{% provider_login_url 'facebook'%}?process=connect" class="btn btn-info border-2 border-dark sign-in-others"><i class="fa-brands fa-facebook me-2"></i>Registrarse con
-          Facebook</a>
       </div>
     </div>
       
