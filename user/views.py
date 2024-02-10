@@ -84,7 +84,7 @@ def activate_with_email(request, user, to_email):
 
         context = {
             'user': user.username,
-            'domain': Site.objects.get(id=1),
+            'domain': Site.objects.get(id=1).domain,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': account_activation_token.make_token(user),
             'protocol': 'http',
@@ -218,7 +218,7 @@ def setup_staff(request: HttpRequest):
 
         context = {
             'user': user.username,
-            'domain': Site.objects.get(id=1),
+            'domain': Site.objects.get(id=1).domain,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': account_activation_token.make_token(user),
             'protocol': 'https' if request.is_secure() else 'http',
