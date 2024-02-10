@@ -188,8 +188,12 @@ def setup_staff(request: HttpRequest):
 
     try:
         group, create = Group.objects.get_or_create(name='Staff')
-        EmailAddress.objects.create(
-            email=user.email, primary=True, user_id=user.pk)
+        if EmailAddress.objects.filter(
+            email=request.POST.get('email')).exists():
+            return JsonResponse({
+                'status': 'error',
+                'text': 'Este correo ya esta vinculado a un usuario, pruebe con otro!'
+            })
         user: MyUser = MyUser.objects.create_staff(
             username=request.POST.get('username'),
             email=request.POST.get('email'),
