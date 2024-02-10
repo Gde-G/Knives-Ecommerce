@@ -200,7 +200,7 @@ def setup_staff(request: HttpRequest):
             email=request.POST.get('email'),
             password=request.POST.get('password')
         )
-
+        EmailAddress.objects.create(email=user.email, user=user, )
         user.groups.add(group)
         user.save()
 
