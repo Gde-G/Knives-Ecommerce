@@ -293,7 +293,7 @@ JAZZMIN_SETTINGS = {
     "topmenu_links": [
         {"name": "Home",  "url": "admin:index",
             "permissions": ["auth.view_user"]},
-        {"name": "Volver sitio principal", "url": "https://knives-ecommerce-simulation.vercel.app/",
+        {"name": "Volver sitio principal", "url": "http://ec2-54-81-50-216.compute-1.amazonaws.com:8000/",
             "new_window": True},
         {"model": "product.Product"},
     ],
