@@ -303,12 +303,6 @@ def staff_logout(request: HttpRequest):
     return redirect('home')
 
 
-def socialaccount_signup(request: HttpRequest):
-    messages.info(
-        request, 'Ya existe una cuenta con ese email! Inicie sesion para vincular su cuenta.')
-    return redirect('account_profile')
-
-
 def activate(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))

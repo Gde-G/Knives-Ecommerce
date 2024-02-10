@@ -17,15 +17,7 @@
           <span class="signin-icons text-white"><i class="fa-solid fa-pen"></i></span>
         </button>
       </div>
-      <div class="col-12 col-sm-6 mt-4">
-        <button type="button" class="btn btn-secondary w-75 my-0 mx-auto p-3 signin-btn-p-shadow" data-bs-toggle="modal"
-          data-bs-target="#id-modal-auto">
-          Automaticamente con
-          <div class="d-inline-block">
-            <span class="signin-icons"><i class="fa-brands fa-google"></i></span>
-          </div>
-        </button>
-      </div>
+
     </div>
     <div class="row text-center">
       <h3 class="display-6">Ya tenes cuenta? <a href="{% url 'account_login' %}" class="link-secondary">Inicia Secion!</a></h3>
@@ -149,33 +141,7 @@
         </div>
       </div>
     </div>
-    <!-- Modal Auto -->
-    <div class="modal fade" id="id-modal-auto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-      aria-labelledby="id-modal-autoLabel" aria-hidden="true">
-      <div class="modal-dialog signin-auto">
-        <div class="modal-content text-center modal-woodGradient">
-          <div class="modal-header ">
-            <h1 class="modal-title display-5 text-white" id="id-modal-autoLabel">Registrarse con </h1>
-            <button type="button" class="btn btn-primary border-0 m-0 p-1" data-bs-dismiss="modal" aria-label="Close"><i
-                class="fa-solid fa-circle-xmark " style="font-size: 2rem;"></i></button>
-          </div>
-          <div class="modal-body mb-3">
-            <div class="row text-center text-white mb-3">
-              <p>Seleccione la opcion con la cual quiera registrarse</p>
-            </div>
-            <div class="row text-center">
-              <div class="col-6 signin-reddir-auto">
-                <a href="{% provider_login_url 'google'%}" class="text-decoration-none">
-                  <span class="signin-icons-modal"><img src="{% static 'assets/images/icons/logo-google.png'%}" width="50" height="50" alt=""></span>
-                  <br>
-                  <small class="text-white text-decoration-none">Google</small>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+
   </div>
 
 </section>

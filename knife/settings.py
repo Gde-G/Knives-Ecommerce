@@ -58,8 +58,6 @@ INSTALLED_APPS = [
 
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
 
     'storages',
 ]
@@ -214,7 +212,6 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 PASSWORD_RESET_TIMEOUT = int(os.getenv('PASSWORD_RESET_TIMEOUT'))
 
 # Allauth config
-SITE_ID = 1
 LOGIN_URL = 'account_login'
 
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
@@ -239,26 +236,6 @@ ACCOUNT_SIGNUP_REDIRECT_URL = 'password_set'
 ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
 ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
 ACCOUNT_USERNAME_REQUIRED = True
-
-SOCIALACCOUNT_LOGIN_ON_GET = True
-SOCIALACCOUNT_EMAIL_VERIFICATION = "optional"
-SOCIALACCOUNT_EMAIL_REQUIRED = True
-
-
-SOCIALACCOUNT_ADAPTER = 'user.adapters.SocialAccountAdapter'
-
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        },
-        'OAUTH_PKCE_ENABLED': True,
-    },
-}
 
 ACCOUNT_FORMS = {
     'add_email': 'allauth.account.forms.AddEmailForm',

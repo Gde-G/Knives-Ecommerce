@@ -141,20 +141,7 @@
         <button type="submit" class="btn btn-secondary border-dark">Ingresar</button>
       </div>
     </form>
-    <!-- WITH External login  -->
-    <div class="container-fluid login text-center w-100 mt-2">
-      <h6 class="display-6 login-subtitle">
-        O ingresa con:
-      </h6>
-      <div class="row">
-        <div class="col-6 login-medias position-relative gx-5">
-          <a href=" {% provider_login_url 'google'%}">
-            <img src="{% static 'assets/images/icons/logo-google.png'%}" class="position-absolute top-50 left-50 translate-middle" width="55" height="55" alt="">
-          </a>
-        </div>
 
-      </div>
-    </div>
     <!-- Redirect to sign in -->
     <div class="d-flex justify-content-start login-no-account mt-2">
       <a href="{% url 'account_signup' %}" class="link-light">No tenes cuenta? Registrate <i
