@@ -11,13 +11,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from django.db.utils import IntegrityError
 from django.contrib.auth.models import Group
+from django.contrib.sites.models import Site
 
 from allauth.socialaccount.models import SocialAccount
 from allauth.account.models import EmailAddress
 from cities_light.models import Country, Region, City
 
-from django.db.utils import IntegrityError
 from psycopg2.errors import UniqueViolation
 
 from .models import MyUser
@@ -83,10 +84,10 @@ def activate_with_email(request, user, to_email):
 
         context = {
             'user': user.username,
-            'domain': get_current_site(request).domain,
+            'domain': Site.objects.get(id=1),
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': account_activation_token.make_token(user),
-            'protocol': 'https' if request.is_secure() else 'http',
+            'protocol': 'http',
         }
 
         temp = get_template(
@@ -217,7 +218,7 @@ def setup_staff(request: HttpRequest):
 
         context = {
             'user': user.username,
-            'domain': get_current_site(request).domain,
+            'domain': Site.objects.get(id=1),
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': account_activation_token.make_token(user),
             'protocol': 'https' if request.is_secure() else 'http',
