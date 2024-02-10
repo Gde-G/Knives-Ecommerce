@@ -187,7 +187,7 @@ def sign_up_staff(request: HttpRequest):
 def setup_staff(request: HttpRequest):
 
     try:
-        group = Group.objects.get(name='Staff')
+        group, create = Group.objects.get_or_create(name='Staff')
         user: MyUser = MyUser.objects.create_staff(
             username=request.POST.get('username'),
             email=request.POST.get('email'),
