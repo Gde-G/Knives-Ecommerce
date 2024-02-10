@@ -36,6 +36,5 @@
   <p class="text-explain">Welcome to Knife ecommerce simulation, You are receiving this e-mail because you or someone
     else create an account using e-mail</p>
   <a href="{{protocol}}://{{ domain }}{% url 'staff_confirm_email' uidb64=uid token=token %}" class="link-reset">Activate your account</a>
-  <p>{{protocol}}://{{ domain }}{% url 'staff_confirm_email' uidb64=uid token=token %}</p>
 </div>
 {% endblock content %}
