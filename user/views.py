@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, JsonResponse, HttpResponseForbidden
-from allauth.socialaccount.models import SocialAccount
 from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
@@ -14,6 +13,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.contrib.auth.models import Group
 
+from allauth.socialaccount.models import SocialAccount
 from allauth.account.models import EmailAddress
 from cities_light.models import Country, Region, City
 
@@ -188,14 +188,13 @@ def setup_staff(request: HttpRequest):
 
     try:
         group, create = Group.objects.get_or_create(name='Staff')
+        EmailAddress.objects.create(
+            email=user.email, primary=True, user_id=user.pk)
         user: MyUser = MyUser.objects.create_staff(
             username=request.POST.get('username'),
             email=request.POST.get('email'),
             password=request.POST.get('password')
         )
-
-        EmailAddress.objects.create(
-            email=user.email, primary=True, user_id=user.pk)
 
         user.groups.add(group)
         user.save()
@@ -277,12 +276,14 @@ def staff_logout(request: HttpRequest):
             cate = Category.objects.filter(add_by=user)
             dis_code = DiscountCode.objects.filter(add_by=user)
             reply_msg = Message.objects.filter(staff_user=user)
+            email = EmailAddress.objects.filter(user=user)
 
             prod.delete()
             hand.delete()
             cate.delete()
             dis_code.delete()
-
+            email.delete()
+            
             for rep in reply_msg:
                 rep.have_answered = False
                 rep.staff_user = None
