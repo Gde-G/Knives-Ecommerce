@@ -204,10 +204,10 @@ def setup_staff(request: HttpRequest):
         return JsonResponse({
             'status': 'error',
             'text': 'Este correo ya esta vinculado a un usuario, pruebe con otro!'})
-    except:
-        print(e)
+    except Exception as e:
         return JsonResponse({
             'status': 'error',
+            'error': f'{e}',
             'text': 'Estamos experimentando problemas. Intente mas tarde!'})
     try:
         mail_subject = "Bienvenido/a como Staff a Knife ecommerce simulation - Confirmación de Registro"
